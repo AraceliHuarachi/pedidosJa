@@ -15,6 +15,12 @@ class User extends Authenticatable
 
     public function orders()
     {
-        return $this->belongsToMany(Order::class, 'order_user');
+        return $this->hasMany(Order::class);
+    }
+
+    // Relación uno a muchos con OrderUser
+    public function orderUsers()
+    {
+        return $this->hasMany(OrderUser::class);
     }
 }

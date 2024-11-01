@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    public function users()
-{
-    return $this->belongsToMany(User::class, 'order_user');
-}
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // Relación uno a muchos con OrderUser
+    public function orderUsers()
+    {
+        return $this->hasMany(OrderUser::class);
+    }
 }
