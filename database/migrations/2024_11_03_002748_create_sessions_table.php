@@ -14,8 +14,7 @@ class CreateSessionsTable extends Migration
     public function up()
     {
         Schema::create('sessions', function (Blueprint $table) {
-
-            $table->string('session_id')->unique(); // Cambia 'id' a 'session_id'
+            $table->string('id')->primary();
             $table->text('payload');
             $table->integer('last_activity');
             $table->unsignedBigInteger('user_id')->nullable(); // Añade la columna 'user_id'
