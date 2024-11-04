@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateSessionsTable extends Migration
 {
-   /**
+    /**
      * Run the migrations.
      *
      * @return void
@@ -14,7 +14,7 @@ class CreateSessionsTable extends Migration
     public function up()
     {
         Schema::create('sessions', function (Blueprint $table) {
-            $table->id(); // Crea la columna 'id' como clave primaria
+
             $table->string('session_id')->unique(); // Cambia 'id' a 'session_id'
             $table->text('payload');
             $table->integer('last_activity');
