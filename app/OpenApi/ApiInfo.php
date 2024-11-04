@@ -8,10 +8,10 @@ use OpenApi\Annotations as OA;
  * @OA\Info(
  *     title="API Documentation",
  *     version="1.0.0",
- *     description="This is the API documentation for the Orders system.",
+ *     description="This is the API documentation for the pedidosJa system.",
  *     @OA\Contact(
- *         name="Your Name",
- *         email="your.email@example.com"
+ *         name="Araceli",
+ *         email="aracelihtorrejon@gmail.com"
  *     ),
  *     @OA\License(
  *         name="MIT",
@@ -19,3 +19,4 @@ use OpenApi\Annotations as OA;
  *     )
  * )
  */
+class ApiInfo {}

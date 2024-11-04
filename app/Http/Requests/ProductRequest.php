@@ -4,6 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     schema="ProductRequest",
+ *     type="object",
+ *     required={"name", "reference_price"},
+ *     @OA\Property(property="name", type="string"),
+ *     @OA\Property(property="reference_price", type="number", format="float")
+ * )
+ */
 class ProductRequest extends FormRequest
 {
     /**
@@ -22,8 +31,8 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'name' => 'required|string',
-			'reference_price' => 'required',
+            'name' => 'required|string',
+            'reference_price' => 'required',
         ];
     }
 }
