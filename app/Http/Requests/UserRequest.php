@@ -4,6 +4,19 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     schema="UserRequest",
+ *     type="object",
+ *     required={"name"},
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
+ *         description="Name of the user",
+ *         example="John Doe"
+ *     )
+ * )
+ */
 class UserRequest extends FormRequest
 {
     /**
@@ -22,7 +35,7 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'name' => 'required|string',
+            'name' => 'required|string',
         ];
     }
 }
