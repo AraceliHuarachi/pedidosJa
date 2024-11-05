@@ -29,8 +29,6 @@ class UserController extends Controller
      *     ),
      *     @OA\Response(response=500, description="Server error")
      * )
-     */ /**
-     * @OA\Tag(name="Users", description="API endpoints for managing users")
      */
     public function index(Request $request)
     {
