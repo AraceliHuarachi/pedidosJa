@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
  * Class Product
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $id
  * @property $name
  * @property $reference_price
+ * @property $slug
  * @property $created_at
  * @property $updated_at
  *
@@ -19,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Product extends Model
 {
-
     protected $perPage = 20;
 
     /**
@@ -27,14 +28,31 @@ class Product extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'reference_price'];
-
+    protected $fillable = ['name', 'reference_price', 'slug'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function orderUserProducts()
     {
-        return $this->hasMany(\App\Models\OrderUserProduct::class, 'id', 'product_id');
+        return $this->hasMany(OrderUserProduct::class, 'id', 'product_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Generar el slug al crear o actualizar
+        static::saving(function ($model) {
+            $model->slug = Str::slug($model->name);
+
+            // Asegurar que el slug sea único (opcional)
+            $originalSlug = $model->slug;
+            $count = 1;
+
+            while (static::where('slug', $model->slug)->exists()) {
+                $model->slug = $originalSlug . '-' . $count++;
+            }
+        });
     }
 }
