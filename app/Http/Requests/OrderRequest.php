@@ -22,9 +22,16 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'description' => 'string',
-			'user_id' => 'required',
-			'order_date' => 'required',
+            'description' => 'required|string', //la descripción es obligatoria
+            'user_id' => 'required|array', // Debe ser un arreglo de IDs
+            'user_id.*' => 'exists:users,id', // Validar que cada user_id exista en la tabla users
+            'amount_money' => 'required|array', // Debe ser un arreglo de montos
+            'amount_money.*' => 'numeric', // Cada monto debe ser numérico
+            'order_date' => 'required|date', // Validar que sea una fecha
+            'products' => 'required|array', // Debe ser un arreglo de productos
+            'products.*.product_id' => 'required|exists:products,id', // Validar que cada product_id exista en la tabla products
+            'products.*.quantity' => 'required|integer|min:1', // Validar que la cantidad sea un número entero mayor a 0
+            'products.*.final_price' => 'required|numeric', // Validar que el precio final sea numérico
         ];
     }
 }
