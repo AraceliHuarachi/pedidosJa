@@ -12,6 +12,11 @@ use App\Http\Resources\OrderResource;
 class OrderController extends Controller
 {
     /**
+     * recibir datos enviados de .
+     */
+    public function createFinalOrder() {}
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
