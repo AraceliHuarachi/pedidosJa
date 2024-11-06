@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Support\Facades\DB;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
-use App\Models\OrderUser;
-use App\Models\OrderUserProduct;
+use App\Services\OrderService;
 
 class OrderController extends Controller
 {
-
+    protected $orderService;
     /**
      * Display a listing of the resource.
      */
@@ -25,59 +23,23 @@ class OrderController extends Controller
         return OrderResource::collection($orders);
     }
 
+    public function __construct(OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
     /**
      * Store a newly created resource in storage.
      */
     public function store(OrderRequest $request)
     {
-        $data = $request->validated();
-
-        // Utilizamos una transacción para asegurarnos de que todos los datos se guarden correctamente
-        DB::beginTransaction();
-
+        // Llamar al método del servicio para crear la orden y sus detalles
         try {
-            // Crear el pedido en la tabla `orders`
-            $orderData = $data['order'];
-            $order = Order::create([
-                'description' => $orderData['description'],
-                'delivery_user_id' => $orderData['delivery_user_id'],
-                'order_date' => $orderData['order_date'],
-            ]);
-
-            // Iterar sobre cada usuario en `order_users` y guardar en la tabla `order_users`
-            foreach ($orderData['order_users'] as $orderUserData) {
-
-                $orderUser = OrderUser::create([
-                    'user_id' => $orderUserData['user_id'],
-                    'amount_money' => $orderUserData['amount_money'],
-                    'order_id' => $order->id,
-                ]);
-
-                // Guardar los productos para cada usuario en la tabla `order_user_products`
-                foreach ($orderUserData['products'] as $productData) {
-                    OrderUserProduct::create([
-                        'order_users_id' => $orderUser->id,
-                        'product_id' => $productData['product_id'],
-                        'quantity' => $productData['quantity'],
-                        'description' => $productData['description'] ?? null,
-                        'final_price' => $productData['final_price'],
-                    ]);
-                }
-            }
-
-            // Confirmar la transacción si todo se guardó correctamente
-            DB::commit();
-
-            return response()->json([
-                'message' => 'Order created successfully',
-                'order_id' => $order->id,
-            ], 201);
+            $this->orderService->storeFinalOrder($request->validated());
+            return response()->json(['message' => 'Order created successfully'], 201);
         } catch (\Exception $e) {
-            // Si algo falla, revertimos la transacción
-            DB::rollBack();
             return response()->json([
                 'message' => 'Failed to create order',
-                'error' => $e->getMessage(),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -85,19 +47,23 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order): Order
+    public function show(Order $order): OrderResource
     {
-        return $order;
+        $order->load('deliveryUser', 'orderUsers.products');
+
+        return new OrderResource($order);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(OrderRequest $request, Order $order): Order
+    public function update(OrderRequest $request, Order $order): OrderResource
     {
         $order->update($request->validated());
 
-        return $order;
+        $order->load('deliveryUser', 'orderUsers.products');
+
+        return new OrderResource($order);
     }
 
     public function destroy(Order $order): Response
