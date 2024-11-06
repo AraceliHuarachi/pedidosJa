@@ -32,7 +32,7 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'reference_price' => 'required|numeric', // Asegúrate de que sea numérico
+            'reference_price' => 'required|numeric|min:0'
         ];
     }
 }
