@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
-    
+
     protected $perPage = 20;
 
     /**
@@ -29,7 +29,7 @@ class Order extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['description', 'user_id', 'order_date'];
+    protected $fillable = ['description', 'delivery_user_id', 'order_date'];
 
 
     /**
@@ -39,7 +39,7 @@ class Order extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -47,5 +47,4 @@ class Order extends Model
     {
         return $this->hasMany(\App\Models\OrderUser::class, 'id', 'order_id');
     }
-    
 }
