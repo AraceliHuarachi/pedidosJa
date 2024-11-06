@@ -31,7 +31,7 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:30',
+            'name' => 'required|string|max:30|unique:products,name',
             'reference_price' => 'required|numeric|min:0'
         ];
     }

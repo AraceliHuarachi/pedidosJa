@@ -28,6 +28,7 @@ class OrderRequest extends FormRequest
             'order.order_date' => 'required|date',
             'order.order_users' => 'required|array',
             'order.order_users.*.user_id' => 'required|exists:users,id',
+            'order.order_users.*.amount_money' => 'required|numeric|min:0',
             'order.order_users.*.products' => 'required|array',
             'order.order_users.*.products.*.product_id' => 'required|exists:products,id',
             'order.order_users.*.products.*.quantity' => 'required|integer|min:1',
