@@ -14,10 +14,21 @@ use App\Models\OrderUserProduct;
 
 class OrderController extends Controller
 {
+
     /**
-     * recibir datos enviados de .
+     * Display a listing of the resource.
      */
-    public function storeFinalOrder(OrderRequest $request)
+    public function index(Request $request)
+    {
+        $orders = Order::paginate();
+
+        return OrderResource::collection($orders);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(OrderRequest $request)
     {
         $data = $request->validated();
 
@@ -35,9 +46,10 @@ class OrderController extends Controller
 
             // Iterar sobre cada usuario en `order_users` y guardar en la tabla `order_users`
             foreach ($orderData['order_users'] as $orderUserData) {
+
                 $orderUser = OrderUser::create([
                     'user_id' => $orderUserData['user_id'],
-                    'amount_money' => $orderUserData['amount_money'], // El dinero entregado en efectivo
+                    'amount_money' => $orderUserData['amount_money'],
                     'order_id' => $order->id,
                 ]);
 
@@ -68,24 +80,6 @@ class OrderController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        $orders = Order::paginate();
-
-        return OrderResource::collection($orders);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(OrderRequest $request): Order
-    {
-        return Order::create($request->validated());
     }
 
     /**
