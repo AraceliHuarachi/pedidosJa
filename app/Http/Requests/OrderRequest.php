@@ -32,7 +32,7 @@ class OrderRequest extends FormRequest
             'order.order_users.*.products' => 'required|array',
             'order.order_users.*.products.*.product_id' => 'required|exists:products,id',
             'order.order_users.*.products.*.quantity' => 'required|integer|min:1|max:100',
-            'order.order_users.*.products.*.description' => 'required|string|max:150',
+            'order.order_users.*.products.*.description' => 'nullable|string|max:150',
             'order.order_users.*.products.*.final_price' => ['required', 'numeric', 'gt:0', 'decimal:0,2', 'max_digits:7'],
         ];
     }
