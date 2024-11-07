@@ -14,7 +14,22 @@ class OrderController extends Controller
 {
     protected $orderService;
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/orders",
+     *     summary="Get list of orders",
+     *     tags={"Orders"},
+     *     security={{"bearer":{}}},
+     *     description="Retrieve a list of all orders.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of orders",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *         )
+     *         )
+     *     )
+     * )
      */
     public function index(Request $request)
     {
@@ -27,8 +42,34 @@ class OrderController extends Controller
     {
         $this->orderService = $orderService;
     }
+
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/orders", 
+     *     summary="Create a new order",
+     *     description="Creates a new order and stores its details, utilizing the OrderService.",
+     *     operationId="storeOrder",
+     *     tags={"Orders"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/OrderRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Order created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Order created successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Failed to create order",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Failed to create order"),
+     *             @OA\Property(property="error", type="string", example="Detailed error message")
+     *         )
+     *     )
+     * )
      */
     public function store(OrderRequest $request)
     {
