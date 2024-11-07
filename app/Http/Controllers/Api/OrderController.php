@@ -15,7 +15,7 @@ class OrderController extends Controller
     protected $orderService;
     /**
      * @OA\Get(
-     *     path="/orders",
+     *     path="/api/orders",
      *     summary="Get list of orders",
      *     tags={"Orders"},
      *     security={{"bearer":{}}},
@@ -45,7 +45,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/orders", 
+     *     path="/api/orders", 
      *     summary="Create a new order",
      *     description="Creates a new order and stores its details, utilizing the OrderService.",
      *     operationId="storeOrder",

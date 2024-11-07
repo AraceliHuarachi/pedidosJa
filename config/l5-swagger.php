@@ -15,6 +15,12 @@ return [
                 'api' => 'api/documentation',
             ],
             'paths' => [
+
+                'swagger' => [
+                    'api' => [
+                        'url' => '/swagger.json', // Ruta del archivo Swagger JSON
+                    ],
+                ],
                 /*
                  * Edit to include full URL in ui for assets
                  */
@@ -236,7 +242,9 @@ return [
          * Set this to `true` in development mode so that docs would be regenerated on each request
          * Set this to `false` to disable swagger generation on production
          */
-        'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', false),
+        'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', true),
+
+        'output' => base_path('public/swagger.json'),
 
         /*
          * Set this to `true` to generate a copy of documentation in yaml format
