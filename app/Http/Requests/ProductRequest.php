@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @OA\Schema(
@@ -31,8 +32,18 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:30',
-            'reference_price' => 'required|numeric|min:0'
+            'name' => [
+            'required',
+            'string',
+            'max:30',
+            'alpha_num',
+            Rule::unique('products', 'name')->ignore($this->product),
+        ],
+           'reference_price' => [
+            'required',
+            'numeric',
+            'gt:0', 
+        ],
         ];
     }
 }
