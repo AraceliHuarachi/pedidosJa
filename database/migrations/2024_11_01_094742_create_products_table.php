@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->decimal('reference_price', 5, 2);
+            $table->decimal('reference_price', 7, 2);
             $table->timestamps();
         });
     }

@@ -33,17 +33,14 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => [
-            'required',
-            'string',
-            'max:30',
-            'alpha_num',
-            Rule::unique('products', 'name')->ignore($this->product),
-        ],
-           'reference_price' => [
-            'required',
-            'numeric',
-            'gt:0', 
-        ],
+                'required',
+                'string',
+                'min:3',
+                'max:30',
+                'alpha_num',
+                Rule::unique('products', 'name')->ignore($this->product),
+            ],
+            'reference_price' => ['required', 'numeric', 'gt:0', 'decimal:0,2', 'max_digits:7']
         ];
     }
 }

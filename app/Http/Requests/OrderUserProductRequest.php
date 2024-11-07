@@ -22,11 +22,11 @@ class OrderUserProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'order_users_id' => 'required',
-			'product_id' => 'required',
+            'order_users_id' => 'required',
+            'product_id' => 'required',
             'quantity' => 'required|numeric|min:1|max:100',
-            'description' => 'required|string|max:150',  
-            'final_price' => 'required|numeric|gt:0',
+            'description' => 'required|string|max:150',
+            'final_price' => ['required', 'numeric', 'gt:0', 'decimal:0,2', 'max_digits:7']
         ];
     }
 }

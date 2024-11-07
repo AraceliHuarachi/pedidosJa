@@ -23,17 +23,17 @@ class OrderRequest extends FormRequest
     {
         return [
             'order' => 'required|array',
-            'order.description' => 'required|string',
+            'order.description' => 'required|string|max:150',
             'order.delivery_user_id' => 'required|exists:users,id',
             'order.order_date' => 'required|date',
             'order.order_users' => 'required|array',
             'order.order_users.*.user_id' => 'required|exists:users,id',
-            'order.order_users.*.amount_money' => 'required|numeric|min:0',
+            'order.order_users.*.amount_money' => ['required', 'numeric', 'gt:0', 'decimal:0,2', 'max_digits:7'],
             'order.order_users.*.products' => 'required|array',
             'order.order_users.*.products.*.product_id' => 'required|exists:products,id',
-            'order.order_users.*.products.*.quantity' => 'required|integer|min:1',
-            'order.order_users.*.products.*.description' => 'nullable|string',
-            'order.order_users.*.products.*.final_price' => 'required|numeric|min:0',
+            'order.order_users.*.products.*.quantity' => 'required|integer|min:1|max:100',
+            'order.order_users.*.products.*.description' => 'required|string|max:150',
+            'order.order_users.*.products.*.final_price' => ['required', 'numeric', 'gt:0', 'decimal:0,2', 'max_digits:7'],
         ];
     }
 }

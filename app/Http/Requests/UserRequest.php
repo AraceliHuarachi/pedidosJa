@@ -39,10 +39,11 @@ class UserRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
+                'min:3',
+                'max:20',
                 'alpha_num',
-                Rule::unique('products', 'name')->ignore($this->product), 
+                Rule::unique('products', 'name')->ignore($this->product),
             ],
         ];
-        
     }
 }
