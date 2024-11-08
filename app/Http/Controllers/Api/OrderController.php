@@ -10,6 +10,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Services\OrderService;
 
+/**
+ * @OA\Tag(name="Orders", description="API endpoints for managing orders")
+ */
 class OrderController extends Controller
 {
     protected $orderService;
