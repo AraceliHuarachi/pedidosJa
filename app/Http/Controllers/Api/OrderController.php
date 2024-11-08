@@ -36,11 +36,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::with('orderUsers') // Cargar la relación 'orderUsers'
-            ->select('id', 'description', 'order_date', 'delivery_user_id') // Seleccionar los campos necesarios
-            ->get();
-
-        return OrderResource::collection($orders);
+        $orders = Order::select('id', 'description', 'order_date', 'delivery_user_id')->get();
 
         return OrderResource::collection($orders);
     }
