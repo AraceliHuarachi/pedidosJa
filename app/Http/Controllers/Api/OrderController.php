@@ -94,6 +94,7 @@ class OrderController extends Controller
      */
     public function show(Order $order): OrderResource
     {
+        // @todo: VERIFICAR SI EXISTE
         $order->load('deliveryUser', 'orderUsers.products');
 
         return new OrderResource($order);
