@@ -36,6 +36,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
+        // @todo Revisar la consulta
         $orders = Order::select('id', 'description', 'order_date', 'delivery_user_id')->get();
 
         return OrderResource::collection($orders);
