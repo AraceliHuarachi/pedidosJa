@@ -8,6 +8,7 @@ use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * @OA\Tag(name="Products", description="API endpoints for managing products")
@@ -54,9 +55,14 @@ class ProductController extends Controller
      *     @OA\Response(response=400, description="Invalid input")
      * )
      */
-    public function store(ProductRequest $request): Product
+    public function store(ProductRequest $request)
     {
-        return Product::create($request->validated());
+        $product = Product::create($request->validated());
+
+        return response()->json([
+            'message' => 'Producto creado exitosamente.',
+            'product' => $product
+        ], 201);
     }
 
     /**
@@ -79,8 +85,21 @@ class ProductController extends Controller
      *     @OA\Response(response=404, description="Product not found")
      * )
      */
-    public function show(Product $product): Product
+    public function show($id)
     {
+        $product = Product::find($id);
+        // $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json([
+                'message' => 'El producto con el ID proporcionado no existe.',
+            ], 404);
+        }
+
+        // if (!$product) {
+        //     throw new ModelNotFoundException("Product with ID {$id} not found.");
+        // }
+
         return $product;
     }
 
@@ -109,11 +128,23 @@ class ProductController extends Controller
      *     @OA\Response(response=404, description="Product not found")
      * )
      */
-    public function update(ProductRequest $request, Product $product): Product
+    public function update(ProductRequest $request, $id)
     {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json([
+                'message' => 'El producto con el ID proporcionado no existe.',
+            ], 404);
+        }
+
+        // Actualizar el producto con los datos validados
         $product->update($request->validated());
 
-        return $product;
+        return response()->json([
+            'message' => 'Producto actualizado exitosamente.',
+            'product' => $product
+        ]);
     }
 
     /**

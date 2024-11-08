@@ -45,14 +45,6 @@ class Product extends Model
         // Generar el slug al crear o actualizar
         static::saving(function ($model) {
             $model->slug = Str::slug($model->name);
-
-            // Asegurar que el slug sea único (opcional)
-            $originalSlug = $model->slug;
-            $count = 1;
-
-            while (static::where('slug', $model->slug)->exists()) {
-                $model->slug = $originalSlug . '-' . $count++;
-            }
         });
     }
 }
