@@ -37,10 +37,10 @@ class ProductRequest extends FormRequest
                 'string',
                 'min:3',
                 'max:30',
-                'alpha_num',
+                'regex:/^[a-zA-Z0-9\s]+$/',
                 Rule::unique('products', 'name')->ignore($this->product),
             ],
-            'reference_price' => ['required', 'numeric', 'gt:0', 'decimal:0,2', 'max_digits:7']
+            'reference_price' => ['required', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/']
         ];
     }
 }

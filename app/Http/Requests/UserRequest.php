@@ -41,7 +41,7 @@ class UserRequest extends FormRequest
                 'string',
                 'min:3',
                 'max:20',
-                'alpha_num',
+                'regex:/^[a-zA-Z0-9\s]+$/',
                 Rule::unique('products', 'name')->ignore($this->product),
             ],
         ];
