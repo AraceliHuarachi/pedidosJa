@@ -39,6 +39,11 @@ class OrderController extends Controller
         // @todo Revisar la consulta
         $orders = Order::select('id', 'description', 'order_date', 'delivery_user_id')->get();
 
+        if ($orders->isEmpty()) {
+            return response()->json([
+                'message' => 'No hay órdenes registradas.',
+            ], 404);
+        }
         return OrderResource::collection($orders);
     }
 
