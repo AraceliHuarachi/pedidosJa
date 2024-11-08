@@ -45,6 +45,6 @@ class Order extends Model
      */
     public function orderUsers()
     {
-        return $this->hasMany(\App\Models\OrderUser::class, 'id', 'order_id');
+        return $this->hasMany(\App\Models\OrderUser::class, 'order_id');
     }
 }
