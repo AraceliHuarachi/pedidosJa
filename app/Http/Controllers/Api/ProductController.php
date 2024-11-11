@@ -33,7 +33,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::all();
+        $products = Product::orderBy('name', 'asc')->get();
 
         return ProductResource::collection($products);
     }
@@ -88,18 +88,12 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        // $product = Product::find($id);
 
         if (!$product) {
             return response()->json([
                 'message' => 'El producto con el ID proporcionado no existe.',
             ], 404);
         }
-
-        // if (!$product) {
-        //     throw new ModelNotFoundException("Product with ID {$id} not found.");
-        // }
-
         return $product;
     }
 
