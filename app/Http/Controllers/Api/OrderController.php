@@ -94,7 +94,72 @@ class OrderController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/orders/{id}",
+     *     summary="Get details of a specific order",
+     *     description="Retrieve the details of a specific order by its ID, including related user and products.",
+     *     operationId="showOrder",
+     *     tags={"Orders"},
+     *     security={{"bearer":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="The ID of the order",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Order details",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="description", type="string", example="Order description"),
+     *             @OA\Property(property="order_date", type="string", format="date-time", example="2024-11-07T12:00:00Z"),
+     *             @OA\Property(property="delivery_user", type="object", 
+     *                 @OA\Property(property="id", type="integer", example=4),
+     *                 @OA\Property(property="name", type="string", example="Javi")
+     *             ),
+     *             @OA\Property(property="order_users", type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="amount_money", type="string", example="10.00"),
+     *                     @OA\Property(property="user", type="object",
+     *                         @OA\Property(property="id", type="integer", example=4),
+     *                         @OA\Property(property="name", type="string", example="Javi")
+     *                     ),
+     *                     @OA\Property(property="orderUserProducts", type="array",
+     *                         @OA\Items(
+     *                             type="object",
+     *                             @OA\Property(property="product_id", type="integer", example=1),
+     *                             @OA\Property(property="quantity", type="integer", example=2),
+     *                             @OA\Property(property="description", type="string", example="Product description"),
+     *                             @OA\Property(property="final_price", type="string", example="20.00")
+     *                         )
+     *                     )
+     *                 )
+     *             ),
+     *             @OA\Property(property="created_at", type="string", format="date-time", example="2024-11-11T12:32:54Z"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time", example="2024-11-11T12:32:54Z")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Order not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Order not found")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Failed to retrieve order details"),
+     *             @OA\Property(property="error", type="string", example="Detailed error message")
+     *         )
+     *     )
+     * )
      */
     public function show(Order $order): OrderResource
     {
