@@ -40,6 +40,11 @@ class Order extends Model
         return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
     }
 
+    public function deliveryUser()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'delivery_user_id', 'id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

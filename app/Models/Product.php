@@ -35,7 +35,7 @@ class Product extends Model
      */
     public function orderUserProducts()
     {
-        return $this->hasMany(OrderUserProduct::class, 'id', 'product_id');
+        return $this->hasMany(OrderUserProduct::class, 'product_id', 'id');
     }
 
     protected static function boot()
