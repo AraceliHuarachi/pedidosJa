@@ -32,7 +32,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::all();
+        $users = User::orderBy('name', 'asc')->get();
 
         return UserResource::collection($users);
     }
@@ -55,9 +55,13 @@ class UserController extends Controller
      * )
      */
 
-    public function store(UserRequest $request): User
+    public function store(UserRequest $request)
     {
-        return User::create($request->validated());
+        $user = User::create($request->validated());
+        return response()->json([
+            'message' => 'Usuario creado exitosamente.',
+            'user' => $user
+        ], 201);
     }
 
     /**
