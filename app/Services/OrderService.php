@@ -33,7 +33,7 @@ class OrderService
                 // Guardar los productos para cada usuario en la tabla `order_user_products`
                 foreach ($orderUserData['products'] as $productData) {
                     OrderUserProduct::create([
-                        'order_users_id' => $orderUser->id,
+                        'order_user_id' => $orderUser->id,
                         'product_id' => $productData['product_id'],
                         'quantity' => $productData['quantity'],
                         'description' => $productData['description'] ?? null,

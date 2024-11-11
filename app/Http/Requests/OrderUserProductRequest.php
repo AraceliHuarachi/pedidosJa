@@ -22,7 +22,7 @@ class OrderUserProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order_users_id' => 'required',
+            'order_user_id' => 'required',
             'product_id' => 'required',
             'quantity' => 'required|numeric|min:1|max:100',
             'description' => 'nullable|string|max:150',

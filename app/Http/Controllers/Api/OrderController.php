@@ -82,7 +82,6 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
-        // Llamar al método del servicio para crear la orden y sus detalles
         try {
             $this->orderService->storeFinalOrder($request->validated());
             return response()->json(['message' => 'Order created successfully'], 201);
@@ -100,7 +99,7 @@ class OrderController extends Controller
     public function show(Order $order): OrderResource
     {
         // @todo: VERIFICAR SI EXISTE
-        $order->load('deliveryUser', 'orderUsers.products');
+        $order->load('deliveryUser', 'orderUsers.orderUserProducts');
 
         return new OrderResource($order);
     }
