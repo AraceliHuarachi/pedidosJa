@@ -18,10 +18,10 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'description' => $this->description,
             'order_date' => $this->order_date,
-            'delivery_user' => $this->delivery_user_id,
+            'delivery_user' => new UserResource($this->whenLoaded('deliveryUser')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            //order_users' => OrderUserResource::collection($this->whenLoaded('orderUsers')),
+            'order_users' => OrderUserResource::collection($this->whenLoaded('orderUsers')),
         ];
     }
 }
