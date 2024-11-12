@@ -23,9 +23,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class OrderUserProduct extends Model
 {
-
-    protected $perPage = 20;
-
     /**
      * The attributes that are mass assignable.
      *

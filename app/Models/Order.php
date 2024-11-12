@@ -21,9 +21,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
-
-    protected $perPage = 20;
-
     /**
      * The attributes that are mass assignable.
      *

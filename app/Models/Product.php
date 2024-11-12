@@ -21,8 +21,6 @@ use Illuminate\Support\Str;
  */
 class Product extends Model
 {
-    protected $perPage = 20;
-
     /**
      * The attributes that are mass assignable.
      *
