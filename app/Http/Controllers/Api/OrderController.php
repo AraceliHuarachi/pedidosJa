@@ -41,7 +41,7 @@ class OrderController extends Controller
             ->get();
         if ($orders->isEmpty()) {
             return response()->json([
-                'message' => 'No hay órdenes registradas.',
+                'message' => 'No orders registered.',
             ], 404);
         }
         return OrderResource::collection($orders);
@@ -163,7 +163,6 @@ class OrderController extends Controller
      */
     public function show(Order $order): OrderResource
     {
-        // @todo: VERIFICAR SI EXISTE
         $order->load('deliveryUser', 'orderUsers.orderUserProducts');
 
         return new OrderResource($order);
