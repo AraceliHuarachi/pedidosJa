@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->timestamps();
         });
     }
