@@ -21,7 +21,7 @@ class OrderController extends Controller
      *     path="/api/orders",
      *     summary="Get list of orders",
      *     tags={"Orders"},
-     *     security={{"bearer":{}}},
+     *    
      *     description="Retrieve a list of all orders.",
      *     @OA\Response(
      *         response=200,
@@ -100,7 +100,6 @@ class OrderController extends Controller
      *     description="Retrieve the details of a specific order by its ID, including related user and products.",
      *     operationId="showOrder",
      *     tags={"Orders"},
-     *     security={{"bearer":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
