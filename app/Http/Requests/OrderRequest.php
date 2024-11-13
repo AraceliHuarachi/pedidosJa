@@ -25,7 +25,7 @@ class OrderRequest extends FormRequest
             'order' => 'required|array',
             'order.description' => 'required|string|max:150',
             'order.delivery_user_id' => 'required|exists:users,id',
-            'order.order_date' => 'required|date',
+            'order.order_date' => 'required|date|after_or_equal:today',
             'order.order_users' => 'required|array',
             'order.order_users.*.user_id' => 'required|exists:users,id',
             'order.order_users.*.amount_money' => ['required', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],
