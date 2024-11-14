@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('delivery_user_id');
             $table->foreign('delivery_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->date('order_date');
+            $table->string('status')->default('draft');
             $table->timestamps();
         });
     }
