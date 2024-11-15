@@ -11,15 +11,6 @@ use App\Http\Resources\OrderUserResource;
 
 class OrderUserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        $orderUsers = OrderUser::paginate();
-
-        return OrderUserResource::collection($orderUsers);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -27,14 +18,6 @@ class OrderUserController extends Controller
     public function store(OrderUserRequest $request): OrderUser
     {
         return OrderUser::create($request->validated());
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(OrderUser $orderUser): OrderUser
-    {
-        return $orderUser;
     }
 
     /**
