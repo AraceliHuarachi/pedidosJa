@@ -12,29 +12,11 @@ use App\Http\Resources\OrderUserProductResource;
 class OrderUserProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
-    {
-        $orderUserProducts = OrderUserProduct::paginate();
-
-        return OrderUserProductResource::collection($orderUserProducts);
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(OrderUserProductRequest $request): OrderUserProduct
     {
         return OrderUserProduct::create($request->validated());
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(OrderUserProduct $orderUserProduct): OrderUserProduct
-    {
-        return $orderUserProduct;
     }
 
     /**
