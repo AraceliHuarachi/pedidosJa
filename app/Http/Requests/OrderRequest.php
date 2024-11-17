@@ -21,21 +21,12 @@ class OrderRequest extends FormRequest
      */
 
 
-    // public function rules(): array
-    // {
-    //     return [
-    //         'order' => 'required|array',
-    //         'order.description' => 'required|string|max:150',
-    //         'order.delivery_user_id' => 'required|exists:users,id',
-    //         'order.order_date' => 'required|date|after_or_equal:today',
-    //         'order.order_users' => 'required|array',
-    //         'order.order_users.*.user_id' => 'required|exists:users,id',
-    //         'order.order_users.*.amount_money' => ['required', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],
-    //         'order.order_users.*.products' => 'required|array',
-    //         'order.order_users.*.products.*.product_id' => 'required|exists:products,id',
-    //         'order.order_users.*.products.*.quantity' => 'required|integer|min:1|max:100',
-    //         'order.order_users.*.products.*.description' => 'nullable|string|max:150',
-    //         'order.order_users.*.products.*.final_price' => ['required', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],
-    //     ];
-    // }
+    public function rules(): array
+    {
+        return [
+            'description' => 'required|string|max:150',
+            'delivery_user_id' => 'required|exists:users,id',
+            'order_date' => 'required|date|after_or_equal:today',
+        ];
+    }
 }

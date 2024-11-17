@@ -24,6 +24,8 @@ class OrderUserRequest extends FormRequest
         return [
 			'user_id' => 'required',
 			'order_id' => 'required',
+            'amount_money' => ['nullable', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],
+
         ];
     }
 }

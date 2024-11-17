@@ -25,8 +25,8 @@ class OrderUserProductRequest extends FormRequest
             'order_user_id' => 'required',
             'product_id' => 'required',
             'quantity' => 'required|numeric|min:1|max:100',
-            'description' => 'nullable|string|max:150',
-            'final_price' => ['required', 'numeric', 'gt:0', 'decimal:0,2', 'max:7']
+            'description' => 'nullable|string|max:255',
+            'final_price' => ['required', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/']
         ];
     }
 }
