@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Services\OrderService;
+use Illuminate\Http\JsonResponse;
 
 /**
  * @OA\Tag(name="Orders", description="API endpoints for managing orders")
@@ -16,6 +17,12 @@ use App\Services\OrderService;
 class OrderController extends Controller
 {
     protected $orderService;
+
+    public function __construct(OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
+
     /**
      * @OA\Get(
      *     path="/api/orders",
@@ -47,10 +54,6 @@ class OrderController extends Controller
         return OrderResource::collection($orders);
     }
 
-    public function __construct(OrderService $orderService)
-    {
-        $this->orderService = $orderService;
-    }
 
     /**
      * @OA\Post(
@@ -80,20 +83,12 @@ class OrderController extends Controller
      *     )
      * )
      */
-    public function store(OrderRequest $request)
+    public function store(OrderRequest $request): JsonResponse
     {
-            $validated = $request->validated();
+        $validated = $request->validated();
 
-        // Crear la orden con estado draft
-        $order = Order::create([
-            'description' => $validated['description'],
-            'user_id' => $validated['user_id'],
-            'delivery_user_id' => $validated['delivery_user_id'],
-            'order_date' => $validated['order_date'],
-            'state' => Order::STATE_DRAFT, // Estado draft por defecto
-        ]);
+        $order = $this->orderService->createDraftOrder($validated);
 
-        // Retornar el ID de la orden creada
         return response()->json(['order_id' => $order->id], 201);
     }
 
