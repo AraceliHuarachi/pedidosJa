@@ -19,7 +19,32 @@ class OrderUserController extends Controller
         $this->orderUserService = $orderUserService;
     }
 
-
+    /**
+     * @OA\Post(
+     *     path="/api/order-users",
+     *     tags={"Order Users"},
+     *     summary="Create a new order user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"order_id", "user_id"},
+     *             @OA\Property(property="order_id", type="integer", description="ID of the order"),
+     *             @OA\Property(property="user_id", type="integer", description="ID of the user associated with the order"),
+     *             @OA\Property(property="amount_money", type="number", format="float", description="Amount of money given by the user (optional, can be null)")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Order user created successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="order_user_id", type="integer", description="ID of the created order user")
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Invalid input")
+     * )
+     */
     public function store(OrderUserRequest $request): JsonResponse
     {
         $validated = $request->validated();

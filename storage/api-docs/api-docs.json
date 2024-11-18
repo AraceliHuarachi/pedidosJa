@@ -40,15 +40,34 @@
                 "tags": [
                     "Orders"
                 ],
-                "summary": "Create a new order",
-                "description": "Creates a new order and stores its details, utilizing the OrderService.",
-                "operationId": "storeOrder",
+                "summary": "Create a new draft order",
+                "operationId": "2123ba58dadb22bd6f2c8081af562230",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/OrderRequest"
+                                "required": [
+                                    "description",
+                                    "delivery_user_id",
+                                    "order_date"
+                                ],
+                                "properties": {
+                                    "description": {
+                                        "description": "Description of the order",
+                                        "type": "string"
+                                    },
+                                    "delivery_user_id": {
+                                        "description": "ID of the delivery user",
+                                        "type": "integer"
+                                    },
+                                    "order_date": {
+                                        "description": "Date and time of the order",
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
@@ -60,9 +79,9 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Order created successfully"
+                                        "order_id": {
+                                            "description": "ID of the created order",
+                                            "type": "integer"
                                         }
                                     },
                                     "type": "object"
@@ -70,25 +89,8 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "Failed to create order",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Failed to create order"
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Detailed error message"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                    "400": {
+                        "description": "Invalid input"
                     }
                 }
             }
@@ -249,6 +251,65 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/order-users": {
+            "post": {
+                "tags": [
+                    "Order Users"
+                ],
+                "summary": "Create a new order user",
+                "operationId": "4bec295699e24570ba268e3fe9ff0fa8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "order_id",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "order_id": {
+                                        "description": "ID of the order",
+                                        "type": "integer"
+                                    },
+                                    "user_id": {
+                                        "description": "ID of the user associated with the order",
+                                        "type": "integer"
+                                    },
+                                    "amount_money": {
+                                        "description": "Amount of money given by the user (optional, can be null)",
+                                        "type": "number",
+                                        "format": "float"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order user created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "order_user_id": {
+                                            "description": "ID of the created order user",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
                     }
                 }
             }
@@ -727,6 +788,10 @@
         {
             "name": "Users",
             "description": "API endpoints for managing users"
+        },
+        {
+            "name": "Order Users",
+            "description": "Order Users"
         }
     ]
 }
