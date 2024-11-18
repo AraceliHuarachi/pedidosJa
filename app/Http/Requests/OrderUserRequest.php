@@ -22,8 +22,8 @@ class OrderUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'user_id' => 'required',
-			'order_id' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'order_id' => 'required|exists:orders,id',
             'amount_money' => ['nullable', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],
 
         ];
