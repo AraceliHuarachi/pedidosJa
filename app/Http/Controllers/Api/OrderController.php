@@ -82,15 +82,19 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
-        try {
-            $this->orderService->storeFinalOrder($request->validated());
-            return response()->json(['message' => 'Order created successfully'], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to create order',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+            $validated = $request->validated();
+
+        // Crear la orden con estado draft
+        $order = Order::create([
+            'description' => $validated['description'],
+            'user_id' => $validated['user_id'],
+            'delivery_user_id' => $validated['delivery_user_id'],
+            'order_date' => $validated['order_date'],
+            'state' => Order::STATE_DRAFT, // Estado draft por defecto
+        ]);
+
+        // Retornar el ID de la orden creada
+        return response()->json(['order_id' => $order->id], 201);
     }
 
     /**
