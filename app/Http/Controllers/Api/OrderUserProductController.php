@@ -22,10 +22,34 @@ class OrderUserProductController extends Controller
     }
 
     /**
-     * Crear un nuevo registro en order_user_products.
-     *
-     * @param OrderUserProductRequest $request
-     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/order-user-products",
+     *     tags={"Order User Products"},
+     *     summary="Create a new order user product association",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"order_user_id", "product_id", "quantity", "amount_money"},
+     *             @OA\Property(property="order_user_id", type="integer", description="ID of the order user"),
+     *             @OA\Property(property="product_id", type="integer", description="ID of the product associated with the order user"),
+     *             @OA\Property(property="quantity", type="integer", description="Quantity of the product"),
+     *             @OA\Property(property="final_price", type="number", format="float", description="final price of the product"),
+     *             @OA\Property(property="description", type="string", description="Description of the order"),
+     *             @OA\Property(property="amount_money", type="number", format="float", description="Amount of money contributed by the user for the product")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Order user product created successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", description="Success message")
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Invalid input"),
+     *     @OA\Response(response=404, description="Order user record not found")
+     * )
      */
     public function store(OrderUserProductRequest $request): JsonResponse
     {
@@ -35,9 +59,9 @@ class OrderUserProductController extends Controller
             // Usar el servicio para crear el registro
             $this->orderUserProductService->createOrderUserProduct($validated);
 
-            return response()->json(['message' => 'Productos asociados correctamente'], 200);
+            return response()->json(['message' => 'Correctly associated products.'], 200);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'El registro en order_users no existe.'], 404);
+            return response()->json(['error' => 'Record in order_users does not exist.'], 404);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
