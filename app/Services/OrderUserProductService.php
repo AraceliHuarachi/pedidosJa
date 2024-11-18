@@ -25,7 +25,8 @@ class OrderUserProductService
         $order = $orderUser->order;
 
         // Validar que la orden esté en un estado válido
-        if ($order->state !== Order::STATE_IN_PROCESS) {
+        if ($order->state !== Order::STATE_DRAFT) {
+            // if ($order->state !== Order::STATE_IN_PROCESS) {
             throw new Exception('The order is not in a valid state to associate products.');
         }
 
@@ -34,11 +35,15 @@ class OrderUserProductService
             'order_user_id' => $data['order_user_id'],
             'product_id' => $data['product_id'],
             'quantity' => $data['quantity'],
-            'amount_money' => $data['amount_money'],
+            'description' => $data['description'],
+            'final_price' => $data['final_price'],
         ]);
 
         // Actualizar el campo amount_money en order_user
-        $orderUser->update(['amount_money' => $data['amount_money']]);
+        if (isset($data['amount_money'])) {
+            $orderUser->update(['amount_money' => $data['amount_money']]);
+        }
+
 
         return $orderUserProduct;
     }
