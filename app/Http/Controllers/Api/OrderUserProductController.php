@@ -8,37 +8,39 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderUser;
+use App\Services\OrderUserProductService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 
 class OrderUserProductController extends Controller
 {
+    private OrderUserProductService $orderUserProductService;
+
+    public function __construct(OrderUserProductService $orderUserProductService)
+    {
+        $this->orderUserProductService = $orderUserProductService;
+    }
+
     /**
-     * Store a newly created resource in storage.
+     * Crear un nuevo registro en order_user_products.
+     *
+     * @param OrderUserProductRequest $request
+     * @return JsonResponse
      */
-    public function store(OrderUserProductRequest $request)
+    public function store(OrderUserProductRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
-        // Obtener el OrderUser y verificar que la orden esté en estado válido
-        $orderUser = OrderUser::findOrFail($validated['order_user_id']);
-        $order = $orderUser->order;
+        try {
+            // Usar el servicio para crear el registro
+            $this->orderUserProductService->createOrderUserProduct($validated);
 
-        if ($order->state !== Order::STATE_IN_PROCESS) {
-            return response()->json(['error' => 'La orden no está en un estado válido para asociar productos'], 400);
+            return response()->json(['message' => 'Productos asociados correctamente'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'El registro en order_users no existe.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
         }
-
-        // Crear el registro en order_user_products
-        $orderUserProduct = OrderUserProduct::create([
-            'order_user_id' => $validated['order_user_id'],
-            'product_id' => $validated['product_id'],
-            'quantity' => $validated['quantity'],
-            'amount_money' => $validated['amount_money'],
-        ]);
-
-        // Actualizar el campo amount_money en order_user
-        $orderUser->update(['amount_money' => $validated['amount_money']]);
-
-        // Retornar mensaje de éxito
-        return response()->json(['message' => 'Productos asociados correctamente'], 200);
     }
 
     /**
