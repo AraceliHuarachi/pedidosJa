@@ -20,7 +20,6 @@ class OrderService
     {
         return Order::create([
             'description' => $data['description'],
-            'user_id' => $data['user_id'],
             'delivery_user_id' => $data['delivery_user_id'],
             'order_date' => $data['order_date'],
             'state' => Order::STATE_DRAFT,

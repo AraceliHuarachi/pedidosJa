@@ -57,32 +57,31 @@ class OrderController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/orders", 
-     *     summary="Create a new order",
-     *     description="Creates a new order and stores its details, utilizing the OrderService.",
-     *     operationId="storeOrder",
+     *     path="/api/orders",
      *     tags={"Orders"},
+     *     summary="Create a new draft order",
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/OrderRequest")
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"description", "delivery_user_id", "order_date"},
+     *             @OA\Property(property="description", type="string", description="Description of the order"),
+     *             @OA\Property(property="delivery_user_id", type="integer", description="ID of the delivery user"),
+     *             @OA\Property(property="order_date", type="string", format="date-time", description="Date and time of the order")
+     *         )
      *     ),
      *     @OA\Response(
      *         response=201,
      *         description="Order created successfully",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Order created successfully")
+     *             type="object",
+     *             @OA\Property(property="order_id", type="integer", description="ID of the created order")
      *         )
      *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Failed to create order",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Failed to create order"),
-     *             @OA\Property(property="error", type="string", example="Detailed error message")
-     *         )
-     *     )
+     *     @OA\Response(response=400, description="Invalid input")
      * )
      */
+
     public function store(OrderRequest $request): JsonResponse
     {
         $validated = $request->validated();
