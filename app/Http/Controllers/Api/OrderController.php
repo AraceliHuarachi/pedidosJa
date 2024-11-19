@@ -166,15 +166,49 @@ class OrderController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/orders/{id}",
+     *     tags={"Orders"},
+     *     summary="Update an existing order",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the order to update",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"description", "delivery_user_id", "order_date"},
+     *             @OA\Property(property="description", type="string", description="Description of the order"),
+     *             @OA\Property(property="delivery_user_id", type="integer", description="ID of the delivery user"),
+     *             @OA\Property(property="order_date", type="string", format="date-time", description="Date and time of the order")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Order updated successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="order_id", type="integer", description="ID of the updated order")
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Invalid input or invalid state of the order"),
+     *     @OA\Response(response=404, description="Order not found")
+     * )
      */
-    public function update(OrderRequest $request, Order $order): OrderResource
+    public function update(OrderRequest $request, int $id): JsonResponse
     {
-        $order->update($request->validated());
+        $validated = $request->validated();
 
-        $order->load('deliveryUser', 'orderUsers.products');
-
-        return new OrderResource($order);
+        try {
+            $order = $this->orderService->updateOrder($validated, $id);
+            return response()->json(['order_id' => $order->id], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function destroy(Order $order): Response
