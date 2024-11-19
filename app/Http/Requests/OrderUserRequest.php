@@ -23,7 +23,7 @@ class OrderUserRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'order_id' => 'required|exists:orders,id',
+            'order_id' => $this->isMethod('post') ? 'required|exists:orders,id' : 'sometimes|exists:orders,id',
             'amount_money' => ['nullable', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],
 
         ];
