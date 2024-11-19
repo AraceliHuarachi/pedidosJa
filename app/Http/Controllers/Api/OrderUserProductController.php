@@ -36,7 +36,6 @@ class OrderUserProductController extends Controller
      *             @OA\Property(property="quantity", type="integer", description="Quantity of the product"),
      *             @OA\Property(property="final_price", type="number", format="float", description="final price of the product"),
      *             @OA\Property(property="description", type="string", description="Description of the order"),
-     *             @OA\Property(property="amount_money", type="number", format="float", description="Amount of money contributed by the user for the product")
      *         )
      *     ),
      *     @OA\Response(
@@ -56,7 +55,6 @@ class OrderUserProductController extends Controller
         $validated = $request->validated();
 
         try {
-            // Usar el servicio para crear el registro
             $this->orderUserProductService->createOrderUserProduct($validated);
 
             return response()->json(['message' => 'Correctly associated products.'], 200);
@@ -66,15 +64,54 @@ class OrderUserProductController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
-
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/order-user-products/{id}",
+     *     tags={"Order User Products"},
+     *     summary="Update an existing product in an order-user association",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the order-user-product record to update",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"product_id", "quantity", "final_price"},
+     *             @OA\Property(property="product_id", type="integer", description="ID of the product"),
+     *             @OA\Property(property="quantity", type="integer", description="Quantity of the product", example=2),
+     *             @OA\Property(property="description", type="string", description="Additional details about the product", example="extra cheese"),
+     *             @OA\Property(property="final_price", type="number", format="float", description="Final price of the product"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Order-user-product record updated successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="order_user_product_id", type="integer", description="ID of the updated order-user-product record")
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Invalid input or invalid state of the order"),
+     *     @OA\Response(response=404, description="Order-user-product record not found")
+     * )
      */
-    public function update(OrderUserProductRequest $request, OrderUserProduct $orderUserProduct): OrderUserProduct
+    public function update(OrderUserProductRequest $request, int $id): JsonResponse
     {
-        $orderUserProduct->update($request->validated());
+        $validated = $request->validated();
 
-        return $orderUserProduct;
+        try {
+            $orderUserProduct = $this->orderUserProductService->updateOrderUserProduct($validated, $id);
+
+            return response()->json(['message' => 'Product updated successfully.'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Record in order_user_product does not exist.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function destroy(OrderUserProduct $orderUserProduct): Response
