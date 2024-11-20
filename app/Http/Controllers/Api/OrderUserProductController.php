@@ -116,6 +116,34 @@ class OrderUserProductController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/order-user-products/{id}",
+     *     summary="Delete an OrderUserProduct",
+     *     description="Deletes an OrderUserProduct by its ID.",
+     *     operationId="deleteOrderUserProduct",
+     *      tags={"Order User Products"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the OrderUserProduct to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="No Content - OrderUserProduct successfully deleted"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found - OrderUserProduct not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="No query results for model [OrderUserProduct].")
+     *         )
+     *     )
+     * )
+     */
+
     public function destroy(OrderUserProduct $orderUserProduct): Response
     {
         $orderUserProduct->delete();
