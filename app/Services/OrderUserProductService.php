@@ -22,6 +22,7 @@ class OrderUserProductService
         $orderUserProduct = OrderUserProduct::create([
             'order_user_id' => $data['order_user_id'],
             'product_id' => $data['product_id'],
+            'product_name' => $data['product_name'],
             'quantity' => $data['quantity'],
             'description' => $data['description'],
             'final_price' => $data['final_price'],
@@ -42,6 +43,7 @@ class OrderUserProductService
 
         $orderUserProduct->update([
             'product_id' => $data['product_id'],
+            'product_name' => $data['product_name'],
             'quantity' => $data['quantity'],
             'description' => $data['description'],
             'final_price' => $data['final_price'],
