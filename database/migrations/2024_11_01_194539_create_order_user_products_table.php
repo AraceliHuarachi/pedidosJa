@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_user_id')->constrained('order_users')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->string('product_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->integer('quantity');
             $table->text('description')->nullable()->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->decimal('final_price', 7, 2);
