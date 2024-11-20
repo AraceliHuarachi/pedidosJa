@@ -43,9 +43,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::select('id', 'description', 'order_date', 'delivery_user_id')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $orders = Order::orderBy('created_at', 'desc')->get();
         if ($orders->isEmpty()) {
             return response()->json([
                 'message' => 'No orders registered.',
@@ -111,8 +109,9 @@ class OrderController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="id", type="integer", example=1),
-     *             @OA\Property(property="description", type="string", example="Order description"),
+     *             @OA\Property(property="description", type="string", example="Order description"),    
      *             @OA\Property(property="order_date", type="string", format="date", example="2024-11-07T12:00:00Z"),
+     *             @OA\Property(property="state", type="string",  description="The order's current state"),  
      *             @OA\Property(property="delivery_user", type="object", 
      *                 @OA\Property(property="id", type="integer", example=4),
      *                 @OA\Property(property="name", type="string", example="Javi")
@@ -130,6 +129,7 @@ class OrderController extends Controller
      *                         @OA\Items(
      *                             type="object",
      *                             @OA\Property(property="product_id", type="integer", example=1),
+     *                             @OA\Property(property="product_name", type="string", description="final name of the product"),
      *                             @OA\Property(property="quantity", type="integer", example=2),
      *                             @OA\Property(property="description", type="string", example="Product description"),
      *                             @OA\Property(property="final_price", type="string", example="20.00")
@@ -185,7 +185,7 @@ class OrderController extends Controller
      *             @OA\Property(property="description", type="string", description="Description of the order"),
      *             @OA\Property(property="delivery_user_id", type="integer", description="ID of the delivery user"),
      *             @OA\Property(property="order_date", type="string", format="date", description="Date and time of the order"),
-     *             @OA\Property(property="state", type="string",  enum={"draft", "in_process", "completed"}, description="The order's current state")     *            
+     *             @OA\Property(property="state", type="string",  enum={"draft", "in_process", "completed"}, description="The order's current state")         
      *         )
      *     ),
      *     @OA\Response(
