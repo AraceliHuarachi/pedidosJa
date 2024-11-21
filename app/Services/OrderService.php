@@ -13,7 +13,7 @@ class OrderService
     public function createDraftOrder(array $data): Order
     {
         return Order::create([
-            'description' => $data['description'],
+            'reason' => $data['reason'],
             'delivery_user_id' => $data['delivery_user_id'],
             'order_date' => $data['order_date'],
             'state' => Order::STATE_DRAFT,
@@ -29,7 +29,7 @@ class OrderService
         }
 
         $order->update([
-            'description' => $data['description'],
+            'reason' => $data['reason'],
             'delivery_user_id' => $data['delivery_user_id'],
             'order_date' => $data['order_date'],
         ]);

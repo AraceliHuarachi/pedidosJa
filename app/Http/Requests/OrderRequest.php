@@ -24,7 +24,7 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => 'required|string|max:150',
+            'reason' => 'required|string|max:150',
             'delivery_user_id' => 'required|exists:users,id',
             'order_date' => 'required|date|after_or_equal:today',
             'state' => 'sometimes|in:draft,in_process,completed',

@@ -63,7 +63,7 @@ class OrderController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             required={"description", "delivery_user_id", "order_date"},
-     *             @OA\Property(property="description", type="string", description="Description of the order"),
+     *             @OA\Property(property="reason", type="string", description="Description of the order"),
      *             @OA\Property(property="delivery_user_id", type="integer", description="ID of the delivery user"),
      *             @OA\Property(property="order_date", type="string", format="date", description="Date and time of the order")
      *         )
@@ -109,7 +109,7 @@ class OrderController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="id", type="integer", example=1),
-     *             @OA\Property(property="description", type="string", example="Order description"),    
+     *             @OA\Property(property="reason", type="string", example="Order description"),    
      *             @OA\Property(property="order_date", type="string", format="date", example="2024-11-07T12:00:00Z"),
      *             @OA\Property(property="state", type="string",  description="The order's current state"),  
      *             @OA\Property(property="delivery_user", type="object", 
@@ -182,7 +182,7 @@ class OrderController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             required={"description", "delivery_user_id", "order_date"},
-     *             @OA\Property(property="description", type="string", description="Description of the order"),
+     *             @OA\Property(property="reason", type="string", description="Reason of the order"),
      *             @OA\Property(property="delivery_user_id", type="integer", description="ID of the delivery user"),
      *             @OA\Property(property="order_date", type="string", format="date", description="Date and time of the order"),
      *             @OA\Property(property="state", type="string",  enum={"draft", "in_process", "completed"}, description="The order's current state")         
