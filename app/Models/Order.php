@@ -30,7 +30,7 @@ class Order extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['description', 'delivery_user_id', 'order_date', 'state'];
+    protected $fillable = ['reason', 'delivery_user_id', 'order_date', 'state'];
 
     /**
      * Establecer el estado a 'draft' por defecto cuando se crea la orden.
@@ -41,7 +41,7 @@ class Order extends Model
     {
         static::creating(function ($order) {
             if (is_null($order->state)) {
-                $order->state = self::STATE_DRAFT; 
+                $order->state = self::STATE_DRAFT;
             }
         });
     }
