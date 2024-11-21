@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\traitDecim;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OrderUserProductRequest extends FormRequest
 {
+    use TraitDecim;
     /**
      * Determine if the user is authorized to make this request.
      */
