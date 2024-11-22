@@ -206,12 +206,40 @@ class OrderController extends Controller
 
         try {
             $order = $this->orderService->updateOrder($validated, $id);
+
             return response()->json(['order_id' => $order->id, 'state' => $order->state,], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/order/{id}",
+     *     summary="Delete an Order",
+     *     description="Deletes an Order by its ID.",
+     *     operationId="deleteOrder",
+     *      tags={"Orders"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the Order to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="No Content - Order successfully deleted"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found - Order not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="No query results for model [Order].")
+     *         )
+     *     )
+     * )
+     */
     public function destroy(Order $order): Response
     {
         $order->delete();
