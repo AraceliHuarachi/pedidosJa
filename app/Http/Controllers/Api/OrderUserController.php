@@ -104,6 +104,33 @@ class OrderUserController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/order-user/{id}",
+     *     summary="Delete an OrderUser",
+     *     description="Deletes an OrderUserProduct by its ID.",
+     *     operationId="deleteOrderUser",
+     *      tags={"Order Users"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the OrderUser to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="No Content - OrderUser successfully deleted"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found - OrderUser not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="No query results for model [OrderUser].")
+     *         )
+     *     )
+     * )
+     */
 
     public function destroy(OrderUser $orderUser): Response
     {
