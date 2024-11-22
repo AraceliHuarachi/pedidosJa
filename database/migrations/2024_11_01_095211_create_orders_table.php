@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('delivery_user_id');
             $table->foreign('delivery_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->date('order_date');
-            $table->enum('state', ['draft', 'in process', 'completed', 'canceled'])->default('draft');
+            $table->enum('state', ['draft', 'in_process', 'completed', 'canceled'])->default('draft');
             $table->timestamps();
         });
     }

@@ -24,6 +24,7 @@ class Order extends Model
     const STATE_DRAFT = 'draft';
     const STATE_IN_PROCESS = 'in_process';
     const STATE_COMPLETED = 'completed';
+    const STATE_CANCELED = 'canceled';
 
     /**
      * Los atributos que son asignables en masa.
@@ -54,7 +55,7 @@ class Order extends Model
      */
     public function changeState(string $newState)
     {
-        $validStates = [self::STATE_DRAFT, self::STATE_IN_PROCESS, self::STATE_COMPLETED];
+        $validStates = [self::STATE_DRAFT, self::STATE_IN_PROCESS, self::STATE_COMPLETED, self::STATE_CANCELED];
 
         // Verificamos que el estado sea válido
         if (!in_array($newState, $validStates)) {
@@ -76,19 +77,16 @@ class Order extends Model
      * @param string $newState
      * @return bool
      */
-    protected function isTransitionValid(string $newState)
+    public function isTransitionValid(string $newState)
     {
         //Reglas de negocio para las transiciones
-        switch ($this->state) {
-            case self::STATE_DRAFT:
-                return in_array($newState, [self::STATE_IN_PROCESS]); // De draft solo se puede ir a in_process
-            case self::STATE_IN_PROCESS:
-                return in_array($newState, [self::STATE_COMPLETED]); // De in_process solo se puede ir a completed
-            case self::STATE_COMPLETED:
-                return false; // Ya no se puede cambiar después de completado
-            default:
-                return false;
-        }
+        $validTransitions = [
+            self::STATE_DRAFT => [self::STATE_IN_PROCESS, self::STATE_CANCELED],
+            self::STATE_IN_PROCESS => [self::STATE_COMPLETED, self::STATE_CANCELED],
+            self::STATE_COMPLETED => [],  // Ya no puede cambiar de 'completed'
+            self::STATE_CANCELED => [],   // Ya no puede cambiar de 'canceled'
+        ];
+        return in_array($newState, $validTransitions[$this->state] ?? []);
     }
 
 
