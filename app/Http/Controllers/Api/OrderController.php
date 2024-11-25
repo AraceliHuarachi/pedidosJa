@@ -48,7 +48,7 @@ class OrderController extends Controller
         if ($orders->isEmpty()) {
             return response()->json([
                 'message' => 'No orders registered.',
-            ], 404);
+            ], 200);
         }
         return OrderResource::collection($orders);
     }
