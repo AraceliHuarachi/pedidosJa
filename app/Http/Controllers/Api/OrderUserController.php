@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\OrderUserService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
 class OrderUserController extends Controller
@@ -106,7 +107,7 @@ class OrderUserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/order-user/{id}",
+     *     path="/api/order-users/{id}",
      *     summary="Delete an OrderUser",
      *     description="Deletes an OrderUserProduct by its ID.",
      *     operationId="deleteOrderUser",
@@ -132,10 +133,22 @@ class OrderUserController extends Controller
      * )
      */
 
-    public function destroy(OrderUser $orderUser): Response
+    public function destroy(OrderUser $orderUser, OrderUserService $orderUserService)
     {
-        $orderUser->delete();
+        try {
+            $orderUserService->deleteOrderUser($orderUser->id);
 
-        return response()->noContent();
+            return response()->json([
+                'message' => 'Order_User deleted succesfully'
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'Order_User not found.',
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 404);
+        }
     }
 }

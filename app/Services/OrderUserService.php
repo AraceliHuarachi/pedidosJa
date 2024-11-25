@@ -22,6 +22,7 @@ class OrderUserService
             'amount_money' => null,
         ]);
     }
+
     public function updateOrderUser(array $data, int $id): OrderUser
     {
         $orderUser = OrderUser::findOrFail($id);
@@ -37,5 +38,15 @@ class OrderUserService
         ]);
 
         return $orderUser;
+    }
+
+    public function deleteOrderUser(int $id): void
+    {
+        $orderUser = OrderUser::findOrFail($id);
+        $order = $orderUser->order;
+        if (!in_array($order->state, [Order::STATE_DRAFT, Order::STATE_IN_PROCESS])) {
+            throw new Exception('Yhe order is not in a valid state to delete users.');
+        }
+        $orderUser->delete();
     }
 }
