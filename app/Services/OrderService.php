@@ -23,8 +23,6 @@ class OrderService
     {
         $order = Order::findOrFail($id);
 
-        //  dd($order->state);
-
         if (!in_array($order->state, [Order::STATE_DRAFT, Order::STATE_IN_PROCESS])) {
             throw new Exception('Cannot update order, it is not in a valid state for modification.');
         }
@@ -45,5 +43,14 @@ class OrderService
         }
 
         return $order;
+    }
+
+    public function deleteOrder(int $id): void
+    {
+        $order = Order::findOrFail($id);
+        if (!in_array($order->state, [Order::STATE_DRAFT, Order::STATE_IN_PROCESS])) {
+            throw new Exception('Cannot delete order, it is not in a valid state.');
+        }
+        $order->delete();
     }
 }
