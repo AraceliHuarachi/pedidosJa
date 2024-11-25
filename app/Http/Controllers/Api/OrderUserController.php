@@ -6,6 +6,7 @@ use App\Models\OrderUser;
 use App\Http\Requests\OrderUserRequest;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderUserResource;
 use App\Models\Order;
 use App\Services\OrderUserService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -18,6 +19,66 @@ class OrderUserController extends Controller
     public function __construct(OrderUserService $orderUserService)
     {
         $this->orderUserService = $orderUserService;
+    }
+    /**
+     * @OA\Get(
+     *     path="/api/order-users/{id}",
+     *     summary="Get details of a specific OrderUser",
+     *     description="Retrieve the details of a specific OrderUser by its ID, including related products.",
+     *     operationId="showOrderUser",
+     *     tags={"Order Users"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="The ID of the OrderUser",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OrderUser details",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="user_id", type="integer", example=4),
+     *             @OA\Property(property="amount_money", type="string", example="10.00"),
+     *             @OA\Property(property="order_id", type="integer", example=5),
+     *             @OA\Property(property="created_at", type="string", format="date-time", example="2024-11-11T12:32:54Z"),
+     *             @OA\Property(property="updated_at", type="string", format="date-time", example="2024-11-11T12:32:54Z"),
+     *             @OA\Property(property="products", type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="product_id", type="integer", example=1),
+     *                     @OA\Property(property="product_name", type="string", description="Name of the product"),
+     *                     @OA\Property(property="quantity", type="integer", example=2),
+     *                     @OA\Property(property="description", type="string", example="Product description"),
+     *                     @OA\Property(property="final_price", type="string", example="20.00")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="OrderUser not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="OrderUser not found")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Failed to retrieve OrderUser details"),
+     *             @OA\Property(property="error", type="string", example="Detailed error message")
+     *         )
+     *     )
+     * )
+     */
+    public function show(OrderUser $orderUser): OrderUserResource
+    {
+        $orderUser->load('user', 'orderUserProducts');
+
+        return new OrderUserResource($orderUser);
     }
 
     /**
