@@ -51,4 +51,16 @@ class OrderUserProductService
 
         return $orderUserProduct;
     }
+
+    public function deleteOrderUserProduct(int $id): void
+    {
+        $orderUserProduct = OrderUserProduct::findOrFail($id);
+        $orderUser = $orderUserProduct->orderUser;
+        $order = $orderUser->order;
+
+        if (!in_array($order->state, [Order::STATE_DRAFT, Order::STATE_IN_PROCESS])) {
+            throw new Exception('The order is not in a valid state to delete products.');
+        }
+        $orderUserProduct->delete();
+    }
 }

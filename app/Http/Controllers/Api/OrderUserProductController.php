@@ -118,7 +118,7 @@ class OrderUserProductController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/order-user-products/{id}",
+     *     path="/api/order-user-products/{id}",
      *     summary="Delete an OrderUserProduct",
      *     description="Deletes an OrderUserProduct by its ID.",
      *     operationId="deleteOrderUserProduct",
@@ -132,7 +132,7 @@ class OrderUserProductController extends Controller
      *     ),
      *     @OA\Response(
      *         response=204,
-     *         description="No Content - OrderUserProduct successfully deleted"
+     *         description="OrderUserProduct successfully deleted"
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -144,10 +144,22 @@ class OrderUserProductController extends Controller
      * )
      */
 
-    public function destroy(OrderUserProduct $orderUserProduct): Response
+    public function destroy(OrderUserProduct $orderUserProduct, OrderUserProductService $orderUserProductService)
     {
-        $orderUserProduct->delete();
+        try {
+            $orderUserProductService->deleteOrderUserProduct($orderUserProduct->id);
 
-        return response()->noContent();
+            return response()->json([
+                'message' => 'Order_User_product deleted succesfully.'
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Order_User_Product not found.'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
+        }
     }
 }
