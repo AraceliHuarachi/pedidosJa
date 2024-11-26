@@ -42,8 +42,8 @@ class OrderUserController extends Controller
      *             @OA\Property(property="id", type="integer", example=1),
      *             @OA\Property(property="order_id", type="integer", example=5),
      *             @OA\Property(property="user_id", type="integer", example=4),
-     *             @OA\Property(property="user_name", type="string", description="final name of the user", example=Jhon),
-     *             @OA\Property(property="amount_money", type="string", example="10.00"),
+     *             @OA\Property(property="user_name", type="string", description="final name of the user"),
+     *             @OA\Property(property="amount_money", type="number", format="float", description="Amount of money given by the user"),
      *             @OA\Property(property="created_at", type="string", format="date-time", example="2024-11-11T12:32:54Z"),
      *             @OA\Property(property="updated_at", type="string", format="date-time", example="2024-11-11T12:32:54Z"),
      *             @OA\Property(property="products", type="array",
@@ -94,7 +94,7 @@ class OrderUserController extends Controller
      *             required={"order_id", "user_id"},
      *             @OA\Property(property="order_id", type="integer", description="ID of the order"),
      *             @OA\Property(property="user_id", type="integer", description="ID of the user associated with the order"),
-     *             @OA\Property(property="user_name", type="string", description="final name of the user", example=Jhon),
+     *             @OA\Property(property="user_name", type="string", description="final name of the user", example="Jhon"),
      *             @OA\Property(property="amount_money", type="number", format="float", description="Amount of money given by the user (optional, can be null)")
      *         )
      *     ),
@@ -173,7 +173,7 @@ class OrderUserController extends Controller
      * @OA\Delete(
      *     path="/api/order-users/{id}",
      *     summary="Delete an OrderUser",
-     *     description="Deletes an OrderUserProduct by its ID.",
+     *     description="Deletes an OrderUser by its ID.",
      *     operationId="deleteOrderUser",
      *      tags={"Order Users"},
      *     @OA\Parameter(
@@ -184,7 +184,7 @@ class OrderUserController extends Controller
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
-     *         response=204,
+     *         response=200,
      *         description="No Content - OrderUser successfully deleted"
      *     ),
      *     @OA\Response(
