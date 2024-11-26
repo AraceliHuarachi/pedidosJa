@@ -42,7 +42,7 @@ class UserRequest extends FormRequest
                 'min:3',
                 'max:20',
                 'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/',
-                Rule::unique('products', 'name')->ignore($this->product),
+                Rule::unique('users', 'name')->ignore($this->product),
             ],
         ];
     }
