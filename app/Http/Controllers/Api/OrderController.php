@@ -161,6 +161,12 @@ class OrderController extends Controller
      */
     public function show(Order $order): OrderResource
     {
+        if (!$order) {
+            return response()->json([
+                'message' => 'The requested order does not exist.',
+            ], 404);
+        }
+
         $order->load('deliveryUser', 'orderUsers.user', 'orderUsers.orderUserProducts');
 
         return new OrderResource($order);
