@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('reason')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->unsignedBigInteger('delivery_user_id');
             $table->foreign('delivery_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('d_user_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->date('order_date');
             $table->enum('state', ['draft', 'in_process', 'completed', 'canceled'])->default('draft');
             $table->timestamps();

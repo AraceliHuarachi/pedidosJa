@@ -26,6 +26,7 @@ class OrderRequest extends FormRequest
         return [
             'reason' => 'required|string|max:150',
             'delivery_user_id' => 'required|exists:users,id',
+            'd_user_name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'],
             'order_date' => 'required|date|after_or_equal:today',
             'state' => 'sometimes|in:draft,in_process,completed',
         ];

@@ -19,6 +19,7 @@ class OrderResource extends JsonResource
             'reason' => $this->reason,
             'order_date' => $this->order_date,
             'delivery_user_id' => $this->whenLoaded('deliveryUser') ? $this->deliveryUser->id : null,
+            'd_user_name' => $this->d_user_name,
             'state' => $this->state,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

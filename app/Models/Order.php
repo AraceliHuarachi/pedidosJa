@@ -31,7 +31,7 @@ class Order extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['reason', 'delivery_user_id', 'order_date', 'state'];
+    protected $fillable = ['reason', 'delivery_user_id', 'd_user_name', 'order_date', 'state'];
 
     /**
      * Establecer el estado a 'draft' por defecto cuando se crea la orden.

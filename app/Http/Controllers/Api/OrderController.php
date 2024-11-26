@@ -113,6 +113,7 @@ class OrderController extends Controller
      *             @OA\Property(property="reason", type="string", example="Order description"),    
      *             @OA\Property(property="order_date", type="string", format="date", example="2024-11-07T12:00:00Z"),
      *             @OA\Property(property="state", type="string",  description="The order's current state"),  
+     *             @OA\Property(property="d_user_name", type="string", example="Jhon"),
      *             @OA\Property(property="delivery_user", type="object", 
      *                 @OA\Property(property="id", type="integer", example=4),
      *                 @OA\Property(property="name", type="string", example="Javi")
@@ -121,10 +122,9 @@ class OrderController extends Controller
      *                 @OA\Items(
      *                     type="object",
      *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="user_id", type="integer", example=4),
+     *                     @OA\Property(property="user_name", type="string", example="Javi"),
      *                     @OA\Property(property="amount_money", type="string", example="10.00"),
-     *                     @OA\Property(property="user", type="object",
-     *                         @OA\Property(property="id", type="integer", example=4),
-     *                         @OA\Property(property="name", type="string", example="Javi")
      *                     ),
      *                     @OA\Property(property="orderUserProducts", type="array",
      *                         @OA\Items(

@@ -14,6 +14,7 @@ class OrderService
         return Order::create([
             'reason' => $data['reason'],
             'delivery_user_id' => $data['delivery_user_id'],
+            'd_user_name' => $data['d_user_name'],
             'order_date' => $data['order_date'],
             'state' => Order::STATE_DRAFT,
         ]);
@@ -30,6 +31,7 @@ class OrderService
         $order->update([
             'reason' => $data['reason'] ?? $order->reason,
             'delivery_user_id' => $data['delivery_user_id'] ?? $order->delivery_user_id,
+            'd_user_name' => $data['d_user_name'] ?? $order->d_user_name,
             'order_date' => $data['order_date'] ?? $order->order_date,
         ]);
 
