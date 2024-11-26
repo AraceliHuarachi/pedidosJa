@@ -138,10 +138,8 @@ class OrderUserController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             type="object",
-     *             required={"user_id"},
-     *             @OA\Property(property="user_id", type="integer", description="ID of the user associated with the order"),
-     *             @OA\Property(property="user_name", type="string", description="final name of the user", example=Jhon),
-     *             @OA\Property(property="amount_money", type="number", format="float", description="Amount of money contributed by the user"),
+     *             required={"amount_money"},
+     *             @OA\Property(property="amount_money", type="number", format="float", description="Amount of money contributed by the user", example="20.00"),
      *             )
      *     ),
      *     @OA\Response(

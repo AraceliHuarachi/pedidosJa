@@ -34,8 +34,6 @@ class OrderUserService
         }
 
         $orderUser->update([
-            'user_id' => $data['user_id'],
-            'user_name' => $data['user_name'],
             'amount_money' => $data['amount_money'] ?? $orderUser->amount_money,
         ]);
 
