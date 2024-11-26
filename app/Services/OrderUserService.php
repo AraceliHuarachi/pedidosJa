@@ -19,6 +19,7 @@ class OrderUserService
         return OrderUser::create([
             'order_id' => $data['order_id'],
             'user_id' => $data['user_id'],
+            'user_name' => $data['user_name'],
             'amount_money' => null,
         ]);
     }
@@ -34,6 +35,7 @@ class OrderUserService
 
         $orderUser->update([
             'user_id' => $data['user_id'],
+            'user_name' => $data['user_name'],
             'amount_money' => $data['amount_money'] ?? $orderUser->amount_money,
         ]);
 

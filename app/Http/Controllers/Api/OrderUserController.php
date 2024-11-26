@@ -40,9 +40,10 @@ class OrderUserController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="id", type="integer", example=1),
-     *             @OA\Property(property="user_id", type="integer", example=4),
-     *             @OA\Property(property="amount_money", type="string", example="10.00"),
      *             @OA\Property(property="order_id", type="integer", example=5),
+     *             @OA\Property(property="user_id", type="integer", example=4),
+     *             @OA\Property(property="user_name", type="string", description="final name of the user", example=Jhon),
+     *             @OA\Property(property="amount_money", type="string", example="10.00"),
      *             @OA\Property(property="created_at", type="string", format="date-time", example="2024-11-11T12:32:54Z"),
      *             @OA\Property(property="updated_at", type="string", format="date-time", example="2024-11-11T12:32:54Z"),
      *             @OA\Property(property="products", type="array",
@@ -93,6 +94,7 @@ class OrderUserController extends Controller
      *             required={"order_id", "user_id"},
      *             @OA\Property(property="order_id", type="integer", description="ID of the order"),
      *             @OA\Property(property="user_id", type="integer", description="ID of the user associated with the order"),
+     *             @OA\Property(property="user_name", type="string", description="final name of the user", example=Jhon),
      *             @OA\Property(property="amount_money", type="number", format="float", description="Amount of money given by the user (optional, can be null)")
      *         )
      *     ),
@@ -138,6 +140,7 @@ class OrderUserController extends Controller
      *             type="object",
      *             required={"user_id"},
      *             @OA\Property(property="user_id", type="integer", description="ID of the user associated with the order"),
+     *             @OA\Property(property="user_name", type="string", description="final name of the user", example=Jhon),
      *             @OA\Property(property="amount_money", type="number", format="float", description="Amount of money contributed by the user"),
      *             )
      *     ),

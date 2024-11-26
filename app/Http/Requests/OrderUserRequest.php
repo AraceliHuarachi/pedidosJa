@@ -24,8 +24,9 @@ class OrderUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
             'order_id' => $this->isMethod('post') ? 'required|exists:orders,id' : 'sometimes|exists:orders,id',
+            'user_id' => 'required|exists:users,id',
+            'user_name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'],
             'amount_money' => ['nullable', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],
 
         ];

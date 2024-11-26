@@ -16,9 +16,10 @@ class OrderUserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->whenLoaded('user') ? $this->user->id : null,
-            'amount_money' => $this->amount_money,
             'order_id' => $this->order_id,
+            'user_id' => $this->whenLoaded('user') ? $this->user->id : null,
+            'user_name' => $this->user_name,
+            'amount_money' => $this->amount_money,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'products' => OrderUserProductResource::collection($this->whenLoaded('orderUserProducts')),

@@ -26,7 +26,7 @@ class OrderUser extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['user_id', 'order_id', 'amount_money'];
+    protected $fillable = ['order_id', 'user_id', 'user_name', 'amount_money'];
 
 
     /**
