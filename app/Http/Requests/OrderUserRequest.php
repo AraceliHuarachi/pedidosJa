@@ -16,6 +16,19 @@ class OrderUserRequest extends FormRequest
         return true;
     }
 
+    public function getAmountMoneyRules()
+    {
+        $order = $this->route('order_id')
+            ? \App\Models\Order::find($this->route('order_id'))
+            : null;
+        $isDraft = $order && $order->status === 'draft';
+
+        return array_merge(
+            $isDraft ? ['nullable'] : ['required'],
+            ['numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/']
+        );
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,16 +36,11 @@ class OrderUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->isMethod('put')) {
-            return [
-                'amount_money' => ['required', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],
-            ];
-        }
         return [
             'order_id' => 'required|exists:orders,id',
             'user_id' => 'required|exists:users,id',
             'user_name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'],
-            'amount_money' => ['nullable', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/']
+            'amount_money' => $this->getAmountMoneyRules(),
         ];
     }
 }
