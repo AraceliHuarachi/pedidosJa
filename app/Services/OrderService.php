@@ -55,4 +55,19 @@ class OrderService
         }
         $order->delete();
     }
+
+    public function changeOrderState(Order $order, string $newState): void
+    {
+        $validTransitions = [
+            Order::STATE_DRAFT => [Order::STATE_IN_PROCESS, Order::STATE_CANCELED],
+            Order::STATE_IN_PROCESS => [Order::STATE_COMPLETED, Order::STATE_CANCELED],
+            Order::STATE_COMPLETED => [],
+            Order::STATE_CANCELED => [],
+        ];
+
+        if (!in_array($newState, $validTransitions[$order->state] ?? [])) {
+            throw new Exception("Invalid state transition.");
+        }
+        $order->update(['state' => $newState]);
+    }
 }
