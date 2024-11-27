@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
  * Class Order
  *
  * @property $id
- * @property $description
- * @property $user_id
+ * @property $reason 
+ * @property $delicery_user_id
+ * @property $d_user_name
  * @property $order_date
+ * @property $state
  * @property $created_at
  * @property $updated_at
  *
@@ -46,49 +48,6 @@ class Order extends Model
             }
         });
     }
-
-    /**
-     * Cambiar el estado de la orden de manera controlada.
-     *
-     * @param string $newState
-     * @return void
-     */
-    public function changeState(string $newState)
-    {
-        $validStates = [self::STATE_DRAFT, self::STATE_IN_PROCESS, self::STATE_COMPLETED, self::STATE_CANCELED];
-
-        // Verificamos que el estado sea válido
-        if (!in_array($newState, $validStates)) {
-            throw new \InvalidArgumentException("Estado inválido");
-        }
-
-        // Asegurarnos de que la transición de estado sea válida
-        if ($this->isTransitionValid($newState)) {
-            $this->state = $newState;
-            $this->save();
-        } else {
-            throw new \InvalidArgumentException("Transición de estado no permitida");
-        }
-    }
-
-    /**
-     * Verificar si la transición de estado es válida.
-     *
-     * @param string $newState
-     * @return bool
-     */
-    public function isTransitionValid(string $newState)
-    {
-        //Reglas de negocio para las transiciones
-        $validTransitions = [
-            self::STATE_DRAFT => [self::STATE_IN_PROCESS, self::STATE_CANCELED],
-            self::STATE_IN_PROCESS => [self::STATE_COMPLETED, self::STATE_CANCELED],
-            self::STATE_COMPLETED => [],  // Ya no puede cambiar de 'completed'
-            self::STATE_CANCELED => [],   // Ya no puede cambiar de 'canceled'
-        ];
-        return in_array($newState, $validTransitions[$this->state] ?? []);
-    }
-
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
