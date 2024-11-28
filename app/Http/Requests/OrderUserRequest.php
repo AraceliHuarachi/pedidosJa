@@ -2,18 +2,38 @@
 
 namespace App\Http\Requests;
 
+use App\Services\AmountValidationService;
 use App\Traits\TraitDecim;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OrderUserRequest extends FormRequest
 {
     use TraitDecim;
+
+    protected AmountValidationService $amountValidationService;
+
+    public function _construct(AmountValidationService $amountValidationService)
+    {
+        $this->amountValidationService = $amountValidationService;
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function validateAmountMoney(): void
+    {
+        //obtenemos los datos de la solicitud
+        $orderId = $this->route('order_id');
+        $userId = $this->input('user_id');
+        $amountMoney = $this->input('amount_money');
+        $state = $this->input('state');
+
+        $this->amountValidationService->validateAmountMoney($orderId, $userId, $amountMoney, $state);
     }
 
     public function getAmountMoneyRules()
@@ -30,9 +50,8 @@ class OrderUserRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Reglas de validacion que se aplican a la solicitud.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -42,5 +61,15 @@ class OrderUserRequest extends FormRequest
             'user_name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'],
             'amount_money' => $this->getAmountMoneyRules(),
         ];
+    }
+
+    /**
+     * preparamos la validacion antes de ejecutar. 
+     *
+     * @return void
+     */
+    public function prepareForValidation(): void
+    {
+        $this->validateAmountMoney();
     }
 }
