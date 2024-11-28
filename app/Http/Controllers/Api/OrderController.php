@@ -188,11 +188,12 @@ class OrderController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             type="object",
-     *             required={"description", "delivery_user_id", "order_date"},
+     *             required={"delivery_user_id", "d_user_name", "order_date"},
      *             @OA\Property(property="reason", type="string", description="Reason of the order"),
      *             @OA\Property(property="delivery_user_id", type="integer", description="ID of the delivery user"),
+     *             @OA\Property(property="d_user_name", type="string", example="Jhon"),
      *             @OA\Property(property="order_date", type="string", format="date", description="Date and time of the order"),
-     *             @OA\Property(property="state", type="string",  enum={"draft", "in_process", "completed"}, description="The order's current state")         
+     *             @OA\Property(property="state", type="string",  enum={"draft", "in_process", "completed", "canceled"}, description="The order's current state")         
      *         )
      *     ),
      *     @OA\Response(
