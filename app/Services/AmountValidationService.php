@@ -17,6 +17,10 @@ class AmountValidationService
                 throw new \Exception("The amount_money field is required in the 'in_process' state.");
             }
 
+            $orderUser = OrderUser::where('order_id', $orderId)->firstOrFail();
+
+            $userId = $orderUser->user_id;
+
             //calculo de la sumatoria de final_price
             $totalFinalPrice = $this->getTotalFinalPriceForUser($orderId, $userId);
 

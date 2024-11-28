@@ -47,31 +47,30 @@ class OrderService
             throw new Exception('Cannot update order, it is not in a valid state for modification.');
         }
 
-        //Si la orden esta en estado "in_process" y se esta actualizando el monto, aplicamos la validacion
-        if ($order->state === Order::STATE_IN_PROCESS) {
-            $this->amountValidationService->ValidateAmountMoney(
-                $order->id,
-                $data['user_id'],
-                $data['amount_money'],
-                $order->state
-            );
+        // Si el estado se está actualizando, validamos la transición
+        if (isset($data['state'])) {
+            $this->changeOrderState($order, $data['state']);
         }
 
+        // Validación de monto si está en proceso
+        if ($order->state === Order::STATE_IN_PROCESS) {
+
+            $orderUser = $order->orderUser;
+
+            // $this->amountValidationService->ValidateAmountMoney(
+            //     $order->id,
+            //     $orderUser->amount_money,
+            //     $order->state
+            // );
+        }
+
+        // Actualización de los demás campos
         $order->update([
             'reason' => $data['reason'] ?? $order->reason,
             'delivery_user_id' => $data['delivery_user_id'] ?? $order->delivery_user_id,
             'd_user_name' => $data['d_user_name'] ?? $order->d_user_name,
             'order_date' => $data['order_date'] ?? $order->order_date,
         ]);
-
-        // Cambiar el estado si viene explícito en los datos y es válido
-        if (isset($data['state'])) {
-            if ($order->isTransitionValid($data['state'])) {
-                $order->update(['state' => $data['state']]);
-            } else {
-                throw new Exception("Invalid state transition.");
-            }
-        }
 
         return $order;
     }
