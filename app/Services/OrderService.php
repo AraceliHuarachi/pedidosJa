@@ -57,6 +57,10 @@ class OrderService
 
             $orderUser = $order->orderUser;
 
+            if (!$orderUser) {
+                throw new Exception('OrderUser record not found.');
+            }
+
             $this->amountValidationService->ValidateAmountMoney(
                 $order->id,
                 $orderUser->user_id,
