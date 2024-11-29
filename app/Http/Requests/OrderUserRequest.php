@@ -31,39 +31,32 @@ class OrderUserRequest extends FormRequest
         $orderUser = $this->getOrderUser();
 
         if (!$orderUser) {
-            throw new \Exception("No se encontró el registro de OrderUser asociado.");
+            throw new \Exception("The associated OrderUser record was not found.");
         }
 
         //obtenemos los datos del objeto y amount_money de la solicitud.
         $orderId = $orderUser->order_id;
         $userId = $orderUser->user_id;
         $amountMoney = $this->input('amount_money');
-
-        $order = \App\Models\Order::find($orderId);
-
-        $state = $order->state;
+        $state = $orderUser->order->state;
 
         $this->amountValidationService->validateAmountMoney($orderId, $userId, $amountMoney, $state);
     }
 
-    public function getAmountMoneyRules()
-    {
-        $order = $this->input('order_id')
-            ? \App\Models\Order::find($this->input('order_id'))
-            : null;
-        $isDraft = $order && $order->state === 'draft';
-
-        $rule = array_merge(
-            $isDraft ? ['nullable'] : ['required'],
-            ['numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/']
-        );
-
-        return $rule;
-    }
-
     private function getOrderUser(): ?OrderUser
     {
-        return $this->route('order_user') ?? $this->orderUser ?? null;
+        return OrderUser::find($this->route('order_user'));
+    }
+
+    public function getAmountMoneyRules()
+    {
+        $orderUser = $this->getOrderUser();
+
+        if ($orderUser && $orderUser->order->state === 'draft') {
+            return ['nullable', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'];
+        }
+
+        return ['required', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'];
     }
 
 
@@ -73,12 +66,27 @@ class OrderUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'order_id' => 'required|exists:orders,id',
-            'user_id' => 'required|exists:users,id',
-            'user_name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'],
-            'amount_money' => $this->getAmountMoneyRules(),
-        ];
+        $rules = [];
+
+        // Si es un método POST (crear)
+        if ($this->isMethod('post')) {
+            $rules = [
+                'order_id' => 'required|exists:orders,id',
+                'user_id' => 'required|exists:users,id',
+                'user_name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'],
+            ];
+        }
+        // Si es un método PUT o PATCH (actualizar)
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules = [
+                'amount_money' => $this->getAmountMoneyRules(),
+            ];
+        }
+
+        // Reglas para amount_money si es un PUT/PATCH o POST
+        $rules['amount_money'] = $this->getAmountMoneyRules();
+
+        return $rules;
     }
 
     /**
