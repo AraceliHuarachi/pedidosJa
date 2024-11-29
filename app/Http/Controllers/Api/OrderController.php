@@ -66,6 +66,7 @@ class OrderController extends Controller
      *             required={"description", "delivery_user_id", "order_date"},
      *             @OA\Property(property="reason", type="string", description="Description of the order"),
      *             @OA\Property(property="delivery_user_id", type="integer", description="ID of the delivery user"),
+     *             @OA\Property(property="d_user_name", type="string", example="Jhon"),
      *             @OA\Property(property="order_date", type="string", format="date", description="Date and time of the order")
      *         )
      *     ),
