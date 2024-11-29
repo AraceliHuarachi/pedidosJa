@@ -12,7 +12,7 @@ class OrderUserRequest extends FormRequest
 
     protected AmountValidationService $amountValidationService;
 
-    public function _construct(AmountValidationService $amountValidationService)
+    public function __construct(AmountValidationService $amountValidationService)
     {
         $this->amountValidationService = $amountValidationService;
     }
@@ -28,12 +28,17 @@ class OrderUserRequest extends FormRequest
     public function validateAmountMoney(): void
     {
         //obtenemos los datos de la solicitud
-        $orderId = $this->route('order_id');
+        $orderId = $this->input('order_id');
         $userId = $this->input('user_id');
         $amountMoney = $this->input('amount_money');
-        $state = $this->input('state');
+       // $state = $this->input('state');
+       //$state ="in_process";
 
-        $this->amountValidationService->validateAmountMoney($orderId, $userId, $amountMoney, $state);
+       $order = \App\Models\Order::find($orderId);
+
+       $state = $order['state'];
+
+       $this->amountValidationService->validateAmountMoney($orderId, $userId, $amountMoney, $state);
     }
 
     public function getAmountMoneyRules()
