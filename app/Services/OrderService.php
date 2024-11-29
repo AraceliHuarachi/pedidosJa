@@ -57,11 +57,12 @@ class OrderService
 
             $orderUser = $order->orderUser;
 
-            // $this->amountValidationService->ValidateAmountMoney(
-            //     $order->id,
-            //     $orderUser->amount_money,
-            //     $order->state
-            // );
+            $this->amountValidationService->ValidateAmountMoney(
+                $order->id,
+                $orderUser->user_id,
+                $orderUser->amount_money ?? 0.0,
+                $order->state
+            );
         }
 
         // Actualización de los demás campos

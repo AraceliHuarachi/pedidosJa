@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\OrderUser;
 use App\Services\AmountValidationService;
 use App\Traits\TraitDecim;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,32 +28,44 @@ class OrderUserRequest extends FormRequest
 
     public function validateAmountMoney(): void
     {
-        //obtenemos los datos de la solicitud
-        $orderId = $this->input('order_id');
-        $userId = $this->input('user_id');
+        $orderUser = $this->getOrderUser();
+
+        if (!$orderUser) {
+            throw new \Exception("No se encontró el registro de OrderUser asociado.");
+        }
+
+        //obtenemos los datos del objeto y amount_money de la solicitud.
+        $orderId = $orderUser->order_id;
+        $userId = $orderUser->user_id;
         $amountMoney = $this->input('amount_money');
-       // $state = $this->input('state');
-       //$state ="in_process";
 
-       $order = \App\Models\Order::find($orderId);
+        $order = \App\Models\Order::find($orderId);
 
-       $state = $order['state'];
+        $state = $order->state;
 
-       $this->amountValidationService->validateAmountMoney($orderId, $userId, $amountMoney, $state);
+        $this->amountValidationService->validateAmountMoney($orderId, $userId, $amountMoney, $state);
     }
 
     public function getAmountMoneyRules()
     {
-        $order = $this->route('order_id')
-            ? \App\Models\Order::find($this->route('order_id'))
+        $order = $this->input('order_id')
+            ? \App\Models\Order::find($this->input('order_id'))
             : null;
-        $isDraft = $order && $order->status === 'draft';
+        $isDraft = $order && $order->state === 'draft';
 
-        return array_merge(
+        $rule = array_merge(
             $isDraft ? ['nullable'] : ['required'],
             ['numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/']
         );
+
+        return $rule;
     }
+
+    private function getOrderUser(): ?OrderUser
+    {
+        return $this->route('order_user') ?? $this->orderUser ?? null;
+    }
+
 
     /**
      * Reglas de validacion que se aplican a la solicitud.
