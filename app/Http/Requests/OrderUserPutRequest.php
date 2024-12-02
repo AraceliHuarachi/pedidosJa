@@ -7,7 +7,7 @@ use App\Services\AmountValidationService;
 use App\Traits\TraitDecim;
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderUserRequest extends FormRequest
+class OrderUserPutRequest extends FormRequest
 {
     use TraitDecim;
 
@@ -18,7 +18,7 @@ class OrderUserRequest extends FormRequest
         $this->amountValidationService = $amountValidationService;
     }
 
-    /**
+    /**                           
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
@@ -66,27 +66,11 @@ class OrderUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [];
 
-        // Si es un método POST (crear)
-        if ($this->isMethod('post')) {
-            $rules = [
-                'order_id' => 'required|exists:orders,id',
-                'user_id' => 'required|exists:users,id',
-                'user_name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'],
-            ];
-        }
-        // Si es un método PUT o PATCH (actualizar)
-        if ($this->isMethod('put') || $this->isMethod('patch')) {
-            $rules = [
-                'amount_money' => $this->getAmountMoneyRules(),
-            ];
-        }
-
-        // Reglas para amount_money si es un PUT/PATCH o POST
-        $rules['amount_money'] = $this->getAmountMoneyRules();
-
-        return $rules;
+        return [
+            // amount_money ahora es siempre requerido
+            'amount_money' => ['required', 'numeric', 'gt:0', 'max:1000', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],
+        ];
     }
 
     /**
