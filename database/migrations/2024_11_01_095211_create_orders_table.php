@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->text('reason')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
-            $table->unsignedBigInteger('delivery_user_id');
-            $table->foreign('delivery_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('delivery_user_id')->nullable(); 
+    $table->foreign('delivery_user_id')->references('id')->on('users')->onDelete('set null'); 
             $table->string('d_user_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->date('order_date');
             $table->enum('state', ['draft', 'in_process', 'completed', 'canceled'])->default('draft');
