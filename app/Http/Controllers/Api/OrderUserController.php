@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\OrderUser;
 use App\Http\Requests\OrderUserRequest;
-use Illuminate\Http\Response;
+use App\Http\Requests\OrderUserPostRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderUserPutRequest;
 use App\Http\Resources\OrderUserResource;
 use App\Models\Order;
 use App\Services\OrderUserService;
@@ -109,7 +110,7 @@ class OrderUserController extends Controller
      *     @OA\Response(response=400, description="Invalid input")
      * )
      */
-    public function store(OrderUserRequest $request): JsonResponse
+    public function store(OrderUserPostRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -154,7 +155,7 @@ class OrderUserController extends Controller
      *     @OA\Response(response=404, description="Order-user record not found")
      * )
      */
-    public function update(OrderUserRequest $request, int $id): JsonResponse
+    public function update(OrderUserPutRequest $request, int $id): JsonResponse
     {
         $validated = $request->validated();
 
