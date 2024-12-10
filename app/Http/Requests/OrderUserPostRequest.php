@@ -14,13 +14,13 @@ class OrderUserPostRequest extends FormRequest
         return [
             'order_id' => 'required|exists:orders,id', // El order_id debe existir
             'user_id' => 'required|exists:users,id', // El user_id debe existir
-            'user_name' => 'required|string|min:3|max:255', // El nombre del usuario
+            'user_name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'], // El nombre del usuario
             'amount_money' => 'nullable|numeric|min:0', // Amount money es opcional al crear
         ];
     }
 
     public function authorize(): bool
     {
-        return true; // Si no tienes lógica de autorización, puede devolver true.
+        return true;
     }
 }

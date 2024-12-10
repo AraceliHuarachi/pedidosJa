@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\NamesValidation;
 use App\Traits\TraitDecim;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -39,7 +40,7 @@ class ProductRequest extends FormRequest
                 'string',
                 'min:3',
                 'max:30',
-                'regex:/^[a-zA-Z0-9\sñÑáéíóúÁÉÍÓÚ]+$/',
+                new NamesValidation('/^[a-zA-Z0-9\sñÑáéíóúÁÉÍÓÚ]+$/'), //usando un patron personalizado
                 Rule::unique('products', 'name')->ignore($this->product),
             ],
             'reference_price' => [

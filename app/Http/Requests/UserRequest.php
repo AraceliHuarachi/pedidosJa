@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\NamesValidation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -41,7 +42,7 @@ class UserRequest extends FormRequest
                 'string',
                 'min:3',
                 'max:20',
-                'regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/',
+                new NamesValidation(), //usando el patron por defecto de la validacion personalizada 
                 Rule::unique('users', 'name')->ignore($this->user),
             ],
         ];
