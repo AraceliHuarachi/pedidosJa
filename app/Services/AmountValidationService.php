@@ -8,38 +8,44 @@ use App\Models\OrderUser;
 
 class AmountValidationService
 {
-    public function ValidateAmountMoney(int $orderId, int $userId, ?float $amountMoney, string $state): void
+    public function ValidateAmountMoney(int $orderId, int $userId, ?float $amountMoney): void
     {
-        if ($state === 'in_process') {
+        //obtenemos el OrderUser correspondiente.
+        $orderUser = ORderUser::where('order_id', $orderId)
+            ->where('user_id', $userId)->firstOrFail();
 
-            //Verificamos que amount_money no sea null
-            if ($amountMoney === null) {
-                throw new \Exception("The amount_money field is required in the 'in_process' state.");
+        // obtenemos el estado de la orden.
+        $state = $orderUser->order->state;
+
+        if (in_array($state, ['draft', 'in_process'])) {
+
+            //Verificamos que amount_money no sea nullo, cuando el estado sea in_process
+            if ($state === 'in_process' && $amountMoney === null) {
+                throw new \Exception("the ampunt_money field is required in the 'in_process' state.");
             }
 
-            $orderUser = OrderUser::where('order_id', $orderId)->firstOrFail();
-
-            $userId = $orderUser->user_id;
-
-            //calculo de la sumatoria de final_price
+            //sumatoria de final_price por quantity
             $totalFinalPrice = $this->getTotalFinalPriceForUser($orderId, $userId);
 
-            //verificamos que sea mayor a la sumatoria de final_price
+            //comparacion con amount_money
             if ($amountMoney < $totalFinalPrice) {
                 throw new \Exception(
-                    "The amount ($amountMoney) must be greater than or equal to the sum of the final prices ($totalFinalPrice)."
+                    "The amount-money ($amountMoney) must be greater than or equal to the sum of the prices ($totalFinalPrice)."
                 );
             }
         }
     }
 
-    //Obtiene la sumatoria de final_price para un usuario especifico.
+    //Obtiene la sumatoria de final_price multiplicado por quantity para un usuario especifico.
     private function getTotalFinalPriceForUser(int $orderId, int $userId): float
     {
+        //obtener el orderUser correspondiente.
         $orderUser = OrderUser::where('order_id', $orderId)
             ->Where('user_id', $userId)
             ->firstOrFail();
 
-        return $orderUser->orderUserProducts->sum('final_price');
+        return $orderUser->orderUserProducts->sum(function ($product) {
+            return $product->final_price * $product->quantity; // Multiplicamos el final_price por la cantidad
+        });
     }
 }
