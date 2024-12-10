@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('order_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id')->nullable(); 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('user_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->decimal('amount_money', 7, 2)->nullable();
             $table->timestamps();

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('order_user_products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_user_id')->constrained('order_users')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products')->onDelete('set null');
+            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('set null');
             $table->string('product_name')->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->integer('quantity');
             $table->text('description')->nullable()->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
