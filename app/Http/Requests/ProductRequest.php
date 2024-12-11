@@ -40,7 +40,7 @@ class ProductRequest extends FormRequest
                 'string',
                 'min:3',
                 'max:30',
-                new NamesValidation('/^[a-zA-Z0-9\sñÑáéíóúÁÉÍÓÚ]+$/'), //usando un patron personalizado
+                new NamesValidation('ALPHANUM'), //usando un patron personalizado
                 Rule::unique('products', 'name')->ignore($this->product),
             ],
             'reference_price' => [

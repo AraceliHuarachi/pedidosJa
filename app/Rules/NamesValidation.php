@@ -9,11 +9,18 @@ class NamesValidation implements ValidationRule
 {
 
     private string $pattern;
-    private string $defaultPattern = '/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'; // Patrón por defecto
+    public const DEFAULT = '/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/'; // Patrón por defecto
+    public const ALPHANUM = '/^[a-zA-Z0-9\sñÑáéíóúÁÉÍÓÚ]+$/'; //Patron variante, incluye numeros
 
-    public function __construct(string $pattern = null)
+    public function __construct(string $variant = 'DEFAULT')
     {
-        $this->pattern = $pattern ?? $this->defaultPattern; // Usa el patrón por defecto si no se pasa otro
+        //vincular las variantes a sus patrones correspondientes
+        $patterns = [
+            'DEFAULT' => self::DEFAULT,
+            'ALPHANUM' => self::ALPHANUM,
+        ];
+
+        $this->pattern = $patterns[$variant] ?? self::DEFAULT;
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
