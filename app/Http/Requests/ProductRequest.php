@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\NamesValidation;
 use App\Traits\TraitDecim;
+use App\Validation\CommonRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,14 +36,14 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
-                'required',
-                'string',
-                'min:3',
-                'max:30',
-                new NamesValidation('ALPHANUM'), //usando un patron personalizado
-                Rule::unique('products', 'name')->ignore($this->product),
-            ],
+            'name' => array_merge(
+                CommonRules::nameRuleBase(), //usando el catalogo de validaciones comunes y su metodo para name
+                [
+                    'max:30',
+                    new NamesValidation('ALPHANUM'), //usando un patron personalizado
+                    Rule::unique('products', 'name')->ignore($this->product),
+                ]
+            ),
             'reference_price' => [
                 'required',
                 'numeric',

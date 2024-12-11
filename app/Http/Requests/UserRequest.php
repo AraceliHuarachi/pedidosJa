@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\NamesValidation;
+use App\Validation\CommonRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -37,14 +38,14 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
-                'required',
-                'string',
-                'min:3',
-                'max:20',
-                new NamesValidation(), //usando el patron por defecto de la validacion personalizada 
-                Rule::unique('users', 'name')->ignore($this->user),
-            ],
+            'name' => array_merge(
+                CommonRules::nameRuleBase(), //usando el catalogo de validaciones comunes y su metodo para name
+                [
+                    'max:20',
+                    new NamesValidation(), //usando el patron por defecto de la validacion personalizada 
+                    Rule::unique('users', 'name')->ignore($this->user),
+                ]
+            ),
         ];
     }
 }
