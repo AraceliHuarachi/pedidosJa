@@ -9,79 +9,84 @@ class ValidationsController extends Controller
 {
     public function validateOrdersData()
     {
+
         // Datos de ejemplo
         $data = [
-            [
-                "Nro" => 1,
-                "date" => "2024-12-11",
-                "products" => [
-                    ["id" => 101, "quantity" => 2],
-                    ["id" => 999, "quantity" => -1], // Error: cantidad negativa
-                ]
-            ],
-            [
-                "Nro" => null, // Error: Nro es requerido
-                "date" => "2024-12-10",
-                "products" => [
-                    ["id" => 103, "quantity" => 4],
-                    ["id" => 104, "quantity" => 3],
-                    ["id" => 104, "total_quantity" => 3],
+            'date' => null,
+            'orders' => [
+                [
+                    "Nro" => 1,
+                    "date" => "2024-12-11",
+                    "products" => [
+                        ["id" => 101, "quantity" => 2],
+                        ["id" => 999, "quantity" => -1], // Error: cantidad negativa
+                    ]
+                ],
+                [
+                    "Nro" => null, // Error: Nro es requerido
+                    "date" => "2024-12-10",
+                    "products" => [
+                        ["id" => null, "quantity" => 4],
+                        ["id" => 104, "quantity" => 0.3], //rompe dos reglas
+                    ]
                 ]
             ]
         ];
 
         // Reglas de validación
         $rules = [
-            '*.Nro' => 'required|integer',
-            '*.date' => 'required|date',
-            '*.products' => 'required|array|min:1',
-            '*.products.*.id' => 'required|integer', // Validación para ID de producto
-            '*.products.*.quantity' => 'required|integer|min:1', // Validación para cantidad
-            '*.products.*.total_quantity' => 'required|integer|min:1', // Validación para cantidad
+            'date' => 'required',
+            'orders' => 'required|array',
+            'orders.*.Nro' => 'required|integer',
+            'orders.*.date' => 'required|date',
+            'orders.*.products' => 'required|array|min:1',
+            'orders.*.products.*.id' => 'required|integer', // Validación para ID de producto
+            'orders.*.products.*.quantity' => 'required|integer|min:1', // Validación para cantidad
         ];
 
-        // Generar mensajes personalizados de manera dinámica
-        $customMessages = $this->generateCustomMessages($rules);
 
-        // $validator = Validator::make($data, $rules, $customMessages); // Validación con mensajes del metodo: 
-        $validator = Validator::make($data, $rules); //validacion con mensajes por defecto de laravel
+        $validator = Validator::make($data, $rules);
 
         // Verificar si la validación pasó o falló
         if ($validator->fails()) {
-            // Si falla, mostrar los errores
-            $errors = $validator->errors();
-            dd($errors->toArray());
+            // Si falla, almacenar los errores
+            $errors = $validator->errors()->toArray();
+
+            //Simplificar los mensajes de error:
+            $simplifiedErrors = $this->simplifyErrorMessages($errors);
+
+            // dd($errors); //ver los errores sin simplificar
+
+            dd($simplifiedErrors);
         } else {
             // Si pasa la validación
             dd('Los datos son válidos');
         }
     }
 
-    /**
-     * Genera los mensajes personalizados de manera dinámica.
-     *
-     * @param array $rules
-     * @return array
-     */
-    private function generateCustomMessages(array $rules)
+    private function simplifyErrorMessages(array $errors)
     {
-        $messages = [];
+        $simplified = [];
 
-        foreach ($rules as $field => $rule) {
-            // Si el campo es anidado, generamos los mensajes correspondientes
-            if (strpos($field, '*') !== false) {
-                // Para los campos anidados como 'products.*.id'
-                $messages["$field.required"] = "El campo {$field} es obligatorio.";
-                $messages["$field.integer"] = "El campo {$field} debe ser un número entero.";
-                $messages["$field.min"] = "El campo quantity debe ser al menos 1."; //mensaje modificado a mano
+        foreach ($errors as $key => $messages) {
+            // Extraer el nombre del campo después del último punto
+            if (preg_match('/\.([^.]+)$/', $key, $matches)) {
+                $fieldName = $matches[1];
             } else {
-                // Para los campos no anidados como 'Nro', 'date', etc.
-                $messages["$field.required"] = "El campo {$field} es obligatorio.";
-                $messages["$field.integer"] = "El campo {$field} debe ser un número entero.";
-                $messages["$field.min"] = "El campo {$field} debe ser al menos 1.";
+                $fieldName = $key;
+            }
+
+            // Reemplazar el nombre completo del campo con el nombre simplificado
+            foreach ($messages as $message) {
+                // Si ya existe una entrada para este campo, agrega el mensaje
+                if (isset($simplified[$key])) {
+                    $simplified[$key][] = str_replace($key, $fieldName, $message);
+                } else {
+                    $simplified[$key] = [str_replace($key, $fieldName, $message)];
+                }
             }
         }
 
-        return $messages;
+        return $simplified;
     }
 }
