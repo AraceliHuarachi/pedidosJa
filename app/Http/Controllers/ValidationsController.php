@@ -2,32 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\traits\SimplifyValidationErrors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ValidationsController extends Controller
 {
-    public function validateOrdersData()
+    use SimplifyValidationErrors;
+
+    public function validateOrdersData(Request $request)
     {
 
         // Datos de ejemplo
         $data = [
-            'date' => null,
+            'day_date' => null,
             'orders' => [
                 [
-                    "Nro" => 1,
+                    "Order_Nro" => 1,
                     "date" => "2024-12-11",
                     "products" => [
-                        ["id" => 101, "quantity" => 2],
-                        ["id" => 999, "quantity" => -1], // Error: cantidad negativa
+                        ["order_product_id" => 101, "quantity" => 2],
+                        ["order_product_id" => 999, "quantity" => -1], // Error: cantidad negativa
                     ]
                 ],
                 [
-                    "Nro" => null, // Error: Nro es requerido
+                    "Order_Nro" => null, // Error: Order_Nro es requerido
                     "date" => "2024-12-10",
                     "products" => [
-                        ["id" => null, "quantity" => 4],
-                        ["id" => 104, "quantity" => 0.3], //rompe dos reglas
+                        ["order_product_id" => null, "quantity" => 4],
+                        ["order_product_id" => 104, "quantity" => 0.3], //rompe dos reglas
                     ]
                 ]
             ]
@@ -35,16 +38,16 @@ class ValidationsController extends Controller
 
         // Reglas de validación
         $rules = [
-            'date' => 'required',
+            'day_date' => 'required',
             'orders' => 'required|array',
-            'orders.*.Nro' => 'required|integer',
+            'orders.*.Order_Nro' => 'required|integer',
             'orders.*.date' => 'required|date',
             'orders.*.products' => 'required|array|min:1',
-            'orders.*.products.*.id' => 'required|integer', // Validación para ID de producto
+            'orders.*.products.*.order_product_id' => 'required|integer', // Validación para ID de producto
             'orders.*.products.*.quantity' => 'required|integer|min:1', // Validación para cantidad
         ];
 
-
+        // validacion 
         $validator = Validator::make($data, $rules);
 
         // Verificar si la validación pasó o falló
@@ -55,38 +58,13 @@ class ValidationsController extends Controller
             //Simplificar los mensajes de error:
             $simplifiedErrors = $this->simplifyErrorMessages($errors);
 
+            return response()->json(['errors' => $simplifiedErrors], 400);
+
             // dd($errors); //ver los errores sin simplificar
-
-            dd($simplifiedErrors);
-        } else {
-            // Si pasa la validación
-            dd('Los datos son válidos');
+            // dd($simplifiedErrors);
         }
-    }
-
-    private function simplifyErrorMessages(array $errors)
-    {
-        $simplified = [];
-
-        foreach ($errors as $key => $messages) {
-            // Extraer el nombre del campo después del último punto
-            if (preg_match('/\.([^.]+)$/', $key, $matches)) {
-                $fieldName = $matches[1];
-            } else {
-                $fieldName = $key;
-            }
-
-            // Reemplazar el nombre completo del campo con el nombre simplificado
-            foreach ($messages as $message) {
-                // Si ya existe una entrada para este campo, agrega el mensaje
-                if (isset($simplified[$key])) {
-                    $simplified[$key][] = str_replace($key, $fieldName, $message);
-                } else {
-                    $simplified[$key] = [str_replace($key, $fieldName, $message)];
-                }
-            }
-        }
-
-        return $simplified;
+        // Si pasa la validación
+        // dd('Los datos son válidos');
+        return response()->json(['message' => 'Datos válidos']);
     }
 }
