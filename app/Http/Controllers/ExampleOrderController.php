@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ValidationsTestRequest;
+use App\Http\Requests\ExampleOrderRequest;
 
-class ValidationsController extends Controller
+class ExampleOrderController extends Controller
 {
-    public function store(ValidationsTestRequest $request)
+    public function store(ExampleOrderRequest $request)
     {
         // En este punto, los datos ya están validados gracias al FormRequest,
         // Si la validación es exitosa, podemos acceder a los datos validados

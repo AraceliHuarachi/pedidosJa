@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\SimplifyValidationErrors;
 use Illuminate\Contracts\Validation\Validator;
 
-class ValidationsTestRequest extends FormRequest
+class ExampleOrderRequest extends FormRequest
 {
     use SimplifyValidationErrors;
 

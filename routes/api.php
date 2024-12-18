@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\OrderUserController;
 use App\Http\Controllers\Api\OrderUserProductController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\ValidationsController;
+use App\Http\Controllers\ExampleOrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,5 +19,5 @@ Route::apiResource('orders', OrderController::class);
 Route::apiResource('order-users', OrderUserController::class);
 Route::apiResource('order-user-products', OrderUserProductController::class);
 
-Route::post('validations', [ValidationsController::class, 'store']);
-Route::get('validations', [ValidationsController::class, 'store']);
+Route::post('validations', [ExampleOrderController::class, 'store']);
+Route::get('validations', [ExampleOrderController::class, 'store']);
