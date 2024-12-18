@@ -19,5 +19,5 @@ Route::apiResource('orders', OrderController::class);
 Route::apiResource('order-users', OrderUserController::class);
 Route::apiResource('order-user-products', OrderUserProductController::class);
 
-Route::post('validations', [ExampleOrderController::class, 'store']);
-Route::get('validations', [ExampleOrderController::class, 'store']);
+Route::post('validations-formreq', [ExampleOrderController::class, 'withFormRequest']);
+Route::get('validations-formreq', [ExampleOrderController::class, 'withFormRequest']);
