@@ -24,7 +24,14 @@ class ExampleOrderRequest extends FormRequest
             'orders.*.date' => 'required|date',
             'orders.*.products' => 'required|array|min:1',
             'orders.*.products.*.order_product_id' => 'required|integer',
-            'orders.*.products.*.quantity' => 'required|integer|min:1',
+            'orders.*.products.*.quantity' => 'required|integer|min:1|multiple_of_five',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'orders.*.products.*.quantity.multiple_of_five' => 'the attribute must be a multiple of five.',
         ];
     }
 }
