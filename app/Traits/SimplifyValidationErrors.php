@@ -7,25 +7,25 @@ use Illuminate\Contracts\Validation\Validator;
 
 trait SimplifyValidationErrors
 {
-    // Metodo para simplificar los mensajes de error.
+    // Method to simplify error messages.
     public function simplifyErrorMessages(array $errors)
     {
         $simplified = [];
 
         foreach ($errors as $key => $messages) {
-            // Extraer el nombre del campo después del último punto
+            // Extract field name after last point.
             if (preg_match('/\.([^.]+)$/', $key, $matches)) {
                 $fieldName = $matches[1];
             } else {
                 $fieldName = $key;
             }
 
-            // Reemplazar guiones bajos con espacios para mejorar la legibilidad
+            // Replace underscores with spaces to improve readability.
             $readableFieldName = str_replace('_', ' ', $fieldName);
 
-            // Reemplazar el nombre completo del campo con el nombre simplificado
+            // Replace the full field name with the simplified name
             foreach ($messages as $message) {
-                // Si ya existe una entrada para este campo, agregar el siguiente mensaje en un array
+                // If an entry already exists for this field, add the following message to an array.
                 if (isset($simplified[$key])) {
                     $simplified[$key][] = str_replace($key, $readableFieldName, $message);
                 } else {
@@ -36,17 +36,17 @@ trait SimplifyValidationErrors
 
         return $simplified;
     }
-    // Metodo para simplificar mensajes de errores dentro de un FormRequest
+    // Method to simplify error messages within a FormRequest.
     public function failedValidation(Validator $validator)
     {
-        $errors = $validator->errors()->getMessages(); // Obtiene los errores originales
-        $simplifiedErrors = $this->simplifyErrorMessages($errors); // simplifica los mensajes de error
+        $errors = $validator->errors()->getMessages(); // Get the original errors
+        $simplifiedErrors = $this->simplifyErrorMessages($errors); // simplifies error messages
 
         throw new HttpResponseException(
-            response()->json($simplifiedErrors, 422) // Devuelve los mensajes modificados
+            response()->json($simplifiedErrors, 422) // Return modified messages
         );
     }
-    // Metodo para simplificar errores cuando se usa Validator directamente
+    // Method to simplify errors when using Validator directly
     public function forLooseValidations(Validator $validator)
     {
         $errors = $validator->errors()->getMessages();
