@@ -31,7 +31,7 @@ class ExampleOrderRequest extends FormRequest
     public function messages()
     {
         return [
-            'orders.*.products.*.quantity.multiple_of_five' => 'the attribute must be a multiple of five.',
+            'orders.*.products.*.quantity.multiple_of_five' => 'the :attribute must be a multiple of five.',
         ];
     }
 }

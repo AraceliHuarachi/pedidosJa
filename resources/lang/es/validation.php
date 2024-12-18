@@ -71,7 +71,7 @@ return [
     'mimes' => 'El :attribute debe ser un archivo de tipo: :values.',
     'mimetypes' => 'El :attribute debe ser un archivo de tipo: :values.',
     'min' => [
-        'numeric' => 'El :attribute debe ser al menos :min.',
+        'numeric' => 'El campo :attribute debe ser al menos :min.',
         'file' => 'El :attribute debe pesar al menos :min kilobytes.',
         'string' => 'El :attribute debe tener al menos :min caracteres.',
         'array' => 'El :attribute debe tener al menos :min elementos.',
@@ -110,7 +110,7 @@ return [
     'url' => 'El formato de :attribute es inválido.',
     'uuid' => 'El :attribute debe ser un UUID válido.',
     //añadir el mensaje de nuestra regla personalizada
-    'multiple_of_five' => 'El :attribute debe ser un múltiplo de cinco.',
+    'multiple_of_five' => 'El campo :attribute debe ser un múltiplo de cinco.',
 
     'attributes' => [
         'day_date' => 'fecha del día',
