@@ -22,6 +22,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Validator::extend('multiple_of_five', function ($attribute, $value, $parameters, $validator) {
             return $value % 5 === 0;
-        });
+        }, __('validation.multiple_of_five'));
     }
 }
