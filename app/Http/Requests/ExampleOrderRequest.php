@@ -12,7 +12,7 @@ class ExampleOrderRequest extends FormRequest
 
     public function authorize()
     {
-        return true;  // Permitir a todos para este ejemplo
+        return true;
     }
 
     public function rules()
@@ -31,7 +31,8 @@ class ExampleOrderRequest extends FormRequest
     public function messages()
     {
         return [
-            'orders.*.products.*.quantity.multiple_of_five' => 'the :attribute must be a multiple of five.',
+            // 'orders.*.products.*.quantity.multiple_of_five' => 'the :attribute must be a multiple of five.', // To english
+            'orders.*.products.*.quantity.multiple_of_five' => __('validation.multiple_of_five'), // To spanish
         ];
     }
 }
