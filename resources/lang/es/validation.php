@@ -177,6 +177,6 @@ return [
         'orders.*.date' => 'fecha del pedido',
         'orders.*.products' => 'productos',
         'orders.*.products.*.order_product_id' => 'ID del producto',
-        'quantity' => 'cantidad de productos',
+        'orders.*.products.*.quantity' => 'cantidad de productos',
     ]
 ];
