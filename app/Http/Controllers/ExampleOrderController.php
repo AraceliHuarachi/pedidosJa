@@ -8,16 +8,16 @@ use Illuminate\Support\Facades\Validator;
 
 class ExampleOrderController extends Controller
 {
-    //usamos el trait (para el metodo sin FormRequest)
+    // Using the trait (for the method without FormRequest)
     use SimplifyValidationErrors;
 
     public function withFormRequest(ExampleOrderRequest $request)
     {
-        // En este punto, los datos ya están validados gracias al FormRequest,
-        // Si la validación es exitosa, podemos acceder a los datos validados
+        // At this point, the data is already validated thanks to the FormRequest,
+        // If the validation is successful, we can access the validated data
         $validatedData = $request->validated();
 
-        // Si la validación pasa, podemos continuar con la lógica de negocio
+        // If the validation passes, we can continue with the business logic
         return response()->json([
             'message' => 'Validate Data',
             'data' => $validatedData
@@ -43,21 +43,21 @@ class ExampleOrderController extends Controller
                     "date" => "2024-12-10",
                     "products" => [
                         ["order_product_id" => null, "quantity" => 4],
-                        ["order_product_id" => 104, "quantity" => 0.3], //rompe dos reglas
+                        ["order_product_id" => 104, "quantity" => 0.3], // Break two rules
                     ]
                 ]
             ]
         ];
 
-        // Reglas de validación
+        // Validation rules
         $rules = [
             'day_date' => 'required',
             'orders' => 'required|array',
             'orders.*.Order_Nro' => 'required|integer',
             'orders.*.date' => 'required|date',
             'orders.*.products' => 'required|array|min:1',
-            'orders.*.products.*.order_product_id' => 'required|integer', // Validación para ID de producto
-            'orders.*.products.*.quantity' => 'required|integer|min:1|multiple_of_five', // Validación para cantidad
+            'orders.*.products.*.order_product_id' => 'required|integer',
+            'orders.*.products.*.quantity' => 'required|integer|min:1|multiple_of_five',
         ];
 
         // Make custom Validation rule
@@ -72,16 +72,19 @@ class ExampleOrderController extends Controller
             'orders.*.products.*.quantity.multiple_of_five' => 'The :attribute must be a multiple of five.'
         ];
 
-        // Crear una instancia de Validator
+        // Create a Validator instance
         $validator = Validator::make($data, $rules, $customMessages);
 
-        // Si la validacion falla
+        // If validation fails
         if ($validator->fails()) {
-            // Usar el metodo del trait para validaciones sueltas
-            return $this->forLooseValidations($validator);
+            // Use the trait method for loose validations
+            // return $this->forLooseValidations($validator);
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
         }
 
-        // Si la validacion pasa, continuar con la logica
+        // If the validation passes, continue with the logic
         return response()->json([
             'message' => 'Validation successful',
             'data' => $data,
