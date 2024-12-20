@@ -11,11 +11,11 @@ return [
     | names, making the validation messages clearer and easier to understand.
     |
     */
-    'day_date' => 'fecha del día',
+    'day date' => 'fecha del día',
     'orders' => 'pedidos',
-    'Order_Nro' => 'número de orden', // For nested field names
-    'orders.*.date' => 'fecha del pedido',
-    'orders.*.products' => 'productos',
-    'orders.*.products.*.order_product_id' => 'ID del producto',
+    'Order Nro' => 'número de orden',
+    'date' => 'fecha del pedido',
+    'products' => 'productos',
+    'order product id' => 'ID del producto',
     'quantity' => 'cantidad de productos',
 ];
