@@ -6,14 +6,21 @@ class FieldTranslator
 {
     public function translate(string $fieldName): string
     {
-        $locale = config('app.locale'); // Get the current locale
+        $locale = config('app.locale'); // Obtener el idioma actual.
 
-        // If locale is 'es', attempt to translate. Otherwise, return the field name as-is.
+        // Intentar traducir el nombre del campo.
         if ($locale === 'es') {
-            return __('attributes.' . $fieldName, [], $locale) ?? $fieldName;
+            $translation = __('attributes.' . $fieldName, [], $locale);
+
+            // Si la traducción no se encuentra, devuelve el nombre original.
+            if ($translation === 'attributes.' . $fieldName) {
+                return $fieldName;
+            }
+
+            return $translation;
         }
 
-        // Return the field name as-is for other locales (e.g., 'en').
+        // Para otros idiomas, devolver el nombre del campo tal cual.
         return $fieldName;
     }
 }
