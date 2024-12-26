@@ -21,8 +21,11 @@ trait SimplifyValidationErrors
         $simplified = [];
 
         foreach ($errors as $key => $messages) {
-            // Extract field name after last point.
-            if (preg_match('/\.([^.]+)$/', $key, $matches)) {
+
+            // Check if the field is nested
+            if (strpos($key, '.') !== false) {
+                // Extract field name after last point.
+                preg_match('/\.([^.]+)$/', $key, $matches);
                 $fieldName = $matches[1];
             } else {
                 $fieldName = $key;
@@ -36,17 +39,19 @@ trait SimplifyValidationErrors
 
             // Replace the full field name with the simplified name
             foreach ($messages as $message) {
-                // If an entry already exists for this field, add the following message to an array.
-                if (isset($simplified[$key])) {
+                // If field is nested, replace entire field (full key)
+                if (strpos($key, '.') !== false) {
                     $simplified[$key][] = str_replace($key, $translateFieldName, $message);
                 } else {
-                    $simplified[$key] = [str_replace($key, $translateFieldName, $message)];
+                    // If the field is not nested, replace only the field name
+                    $simplified[$key][] = str_replace($readableFieldName, $translateFieldName, $message);
                 }
             }
         }
 
         return $simplified;
     }
+
     // Method to simplify error messages within a FormRequest.
     public function failedValidation(Validator $validator)
     {
@@ -57,6 +62,7 @@ trait SimplifyValidationErrors
             response()->json($simplifiedErrors, 422) // Return modified messages
         );
     }
+
     // Method to simplify errors when using Validator directly
     public function forLooseValidations(Validator $validator)
     {
