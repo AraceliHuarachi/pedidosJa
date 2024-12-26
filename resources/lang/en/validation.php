@@ -161,6 +161,9 @@ return [
     'ulid' => 'The :attribute field must be a valid ULID.',
     'uuid' => 'The :attribute field must be a valid UUID.',
 
+    // Add custom rule message
+    'multiple_of_five' => 'The :attribute must be a multiple of five.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
