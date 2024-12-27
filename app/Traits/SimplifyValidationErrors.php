@@ -58,8 +58,13 @@ trait SimplifyValidationErrors
         $errors = $validator->errors()->getMessages(); // Get the original errors
         $simplifiedErrors = $this->simplifyErrorMessages($errors); // simplifies error messages
 
+        $response = [
+            'message' => __('Validation very failed.'),
+            'errors' => $simplifiedErrors,
+        ];
+
         throw new HttpResponseException(
-            response()->json($simplifiedErrors, 422) // Return modified messages
+            response()->json($response, 422) // Return modified messages
         );
     }
 

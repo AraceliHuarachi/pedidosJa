@@ -19,7 +19,7 @@ class ExampleOrderController extends Controller
 
         // Si la validación pasa, podemos continuar con la lógica de negocio
         return response()->json([
-            'message' => 'Validate Data',
+            'message' => __('order created'),
             'data' => $validatedData
         ], 200);
     }
