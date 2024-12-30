@@ -31,8 +31,8 @@ class ExampleOrderRequest extends FormRequest
     public function messages()
     {
         return [
-            // 'orders.*.products.*.quantity.multiple_of_five' => 'the :attribute must be a multiple of five.', // To english
-            'orders.*.products.*.quantity.multiple_of_five' => __('validation.multiple_of_five'), // To spanish
+            //custom validation message:
+            'orders.*.products.*.quantity.multiple_of_five' => __('validation.multiple_of_five'),
         ];
     }
 }
