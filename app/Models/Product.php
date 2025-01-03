@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\TranslationsJsonField;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -21,6 +22,8 @@ use Illuminate\Support\Str;
  */
 class Product extends Model
 {
+    use TranslationsJsonField;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -28,7 +31,7 @@ class Product extends Model
      */
     protected $fillable = ['name', 'reference_price', 'slug', 'translations'];
 
-    protected $cast = [
+    protected $casts = [
         'translations' => 'array',
     ];
 
