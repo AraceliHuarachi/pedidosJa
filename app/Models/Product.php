@@ -26,7 +26,11 @@ class Product extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'reference_price', 'slug'];
+    protected $fillable = ['name', 'reference_price', 'slug', 'translations'];
+
+    protected $cast = [
+        'translations' => 'array',
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
