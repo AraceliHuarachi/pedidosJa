@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @OA\Tag(name="Products", description="API endpoints for managing products")
@@ -33,8 +34,18 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::orderBy('name', 'asc')->get();
+        // //usando consultas mediante el 
+        // $products = Product::orderBy('name', 'asc')->get();
 
+        // Usando una consulta query
+        $query = DB::table('products')->orderBy('name', 'asc');
+
+        $products = $query->get();
+
+        // Necesitamos convertir a instancias del modelo:
+        $products = Product::hydrate($products->toArray());
+
+        // Retornar los recursos:
         return ProductResource::collection($products);
     }
 
@@ -60,7 +71,7 @@ class ProductController extends Controller
         $product = Product::create($request->validated());
 
         return response()->json([
-            'message' => 'Producto creado exitosamente.',
+            'message' => 'Product created succesfully.',
             'product' => $product
         ], 201);
     }
