@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ExampleOrderRequest;
+use App\Http\Resources\ProductResource;
+use App\Models\Product;
 use App\traits\SimplifyValidationErrors;
 use Illuminate\Support\Facades\Validator;
 
@@ -86,5 +88,22 @@ class ExampleOrderController extends Controller
             'message' => 'Validation successful',
             'data' => $data,
         ], 200);
+    }
+
+    public function index()
+    {
+        $products = Product::orderBy('name', 'asc')->get();
+
+        // //consultas query:
+        // $query = Product::where('id', '>', 1);
+        // $query->with('category');
+        // $query->join('categories', 'products.category_id', '=', 'categories.id');
+
+        // // En SQL seria algo como:
+        // Select *
+        // from tabla1,
+        // inner join tabla2 on (tabla1.id = tabla2.fk_id)
+
+        return ProductResource::collection($products);
     }
 }
