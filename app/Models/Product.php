@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\TranslationsJsonField;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -22,6 +23,10 @@ use Illuminate\Support\Str;
  */
 class Product extends Model
 {
+    // To use the factory
+    use HasFactory;
+
+    // To use the translation trait
     use TranslationsJsonField;
 
     /**
@@ -47,7 +52,8 @@ class Product extends Model
     {
         parent::boot();
 
-        // Generar el slug al crear o actualizar
+        // Generate slug on create or update
+
         static::saving(function ($model) {
             $model->slug = Str::slug($model->name);
         });

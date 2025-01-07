@@ -23,7 +23,9 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($products as $product) {
-            Product::create($product); // Cambia aquí para usar el modelo Product
+            Product::create($product);
         }
+
+        Product::factory()->count(10000)->create();
     }
 }
